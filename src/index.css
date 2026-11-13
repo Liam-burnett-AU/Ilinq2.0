@@ -2,11 +2,74 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+/* ------------------------------------------------------------------------
+   Themes. All dark. Colours are "r g b" triplets consumed by Tailwind via
+   rgb(var(--c-x) / alpha). Sheldon College palette:
+   primary #00295c, secondary #a3c1e7, accent #fbd708 (sparingly).
+   ------------------------------------------------------------------------ */
+:root,
+:root[data-theme='blueprint'] {
   color-scheme: dark;
-  --sheldon-primary: #00295c;
-  --sheldon-secondary: #a3c1e7;
-  --sheldon-accent: #fbd708;
+  --c-bg: 5 20 46; /* deep navy */
+  --c-surface: 8 30 66;
+  --c-primary: 0 41 92;
+  --c-primary-strong: 42 95 163;
+  --c-nav-active: 15 53 104;
+  --c-secondary: 163 193 231;
+  --c-accent: 251 215 8;
+  --c-accent-deep: 217 184 0;
+  --c-text: 236 242 250;
+  --c-muted: 148 170 200;
+  --c-border: 163 193 231;
+  --font-sans: 'Space Grotesk';
+  --font-display: 'Space Grotesk';
+  --font-mono: 'JetBrains Mono';
+  --radius-card: 6px;
+  --shadow-card: 0 0 0 1px rgb(var(--c-border) / 0.14), 0 18px 40px -24px rgb(0 0 0 / 0.8);
+  --grid-size: 28px;
+  --grid-line: rgb(var(--c-secondary) / 0.07);
+}
+
+:root[data-theme='midnight'] {
+  --c-bg: 4 18 42;
+  --c-surface: 7 29 63;
+  --c-primary: 0 41 92;
+  --c-primary-strong: 42 95 163;
+  --c-nav-active: 15 53 104;
+  --c-secondary: 163 193 231;
+  --c-accent: 251 215 8;
+  --c-accent-deep: 217 184 0;
+  --c-text: 241 245 249;
+  --c-muted: 148 163 184;
+  --c-border: 255 255 255;
+  --font-sans: 'Inter';
+  --font-display: 'Inter';
+  --font-mono: 'JetBrains Mono';
+  --radius-card: 16px;
+  --shadow-card: 0 1px 0 0 rgb(163 193 231 / 0.08), 0 8px 24px -12px rgb(0 0 0 / 0.6);
+  --grid-size: 0px;
+  --grid-line: transparent;
+}
+
+:root[data-theme='ink'] {
+  --c-bg: 8 9 12;
+  --c-surface: 15 17 22;
+  --c-primary: 0 41 92;
+  --c-primary-strong: 0 41 92;
+  --c-nav-active: 24 27 36;
+  --c-secondary: 163 193 231;
+  --c-accent: 251 215 8;
+  --c-accent-deep: 217 184 0;
+  --c-text: 245 243 238;
+  --c-muted: 150 150 160;
+  --c-border: 163 193 231;
+  --font-sans: 'Inter';
+  --font-display: 'Fraunces';
+  --font-mono: 'JetBrains Mono';
+  --radius-card: 2px;
+  --shadow-card: 0 0 0 1px rgb(var(--c-border) / 0.18);
+  --grid-size: 0px;
+  --grid-line: transparent;
 }
 
 html,
@@ -16,59 +79,114 @@ body,
 }
 
 body {
-  @apply bg-navy-950 text-slate-100;
-  background-image: radial-gradient(1200px 600px at 10% -10%, rgba(0, 41, 92, 0.55), transparent 60%),
-    radial-gradient(900px 500px at 110% 10%, rgba(61, 92, 147, 0.25), transparent 60%);
+  @apply bg-navy-950 text-ink font-sans;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
+    radial-gradient(1200px 600px at 10% -10%, rgb(var(--c-primary) / 0.55), transparent 60%),
+    radial-gradient(900px 500px at 110% 10%, rgb(61 92 147 / 0.25), transparent 60%);
+  background-size: var(--grid-size) var(--grid-size), var(--grid-size) var(--grid-size), auto, auto;
   background-attachment: fixed;
+}
+
+:root[data-theme='midnight'] body,
+:root[data-theme='ink'] body {
+  background-image:
+    radial-gradient(1200px 600px at 10% -10%, rgb(var(--c-primary) / 0.5), transparent 60%),
+    radial-gradient(900px 500px at 110% 10%, rgb(61 92 147 / 0.2), transparent 60%);
+  background-size: auto, auto;
 }
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(163, 193, 231, 0.25) transparent;
+  scrollbar-color: rgb(var(--c-secondary) / 0.25) transparent;
+}
+
+h1,
+h2,
+h3 {
+  @apply font-display;
+}
+
+:root[data-theme='ink'] h1 {
+  font-weight: 500;
+  letter-spacing: -0.01em;
 }
 
 @layer components {
   .card {
-    @apply rounded-2xl border border-white/5 bg-navy-900/70 shadow-card backdrop-blur-sm;
+    @apply relative rounded-card border border-line/10 bg-navy-900/75 shadow-card backdrop-blur-sm;
+  }
+  /* Blueprint: corner ticks on cards */
+  :root[data-theme='blueprint'] .card::before,
+  :root[data-theme='blueprint'] .card::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    pointer-events: none;
+    border-color: rgb(var(--c-secondary) / 0.55);
+    border-style: solid;
+  }
+  :root[data-theme='blueprint'] .card::before {
+    top: -1px;
+    left: -1px;
+    border-width: 1px 0 0 1px;
+  }
+  :root[data-theme='blueprint'] .card::after {
+    bottom: -1px;
+    right: -1px;
+    border-width: 0 1px 1px 0;
   }
   .card-pad {
     @apply p-4 sm:p-5;
   }
+  .card-title {
+    @apply text-[11px] font-semibold uppercase tracking-[0.2em] text-sky/90 font-mono;
+  }
+  :root[data-theme='midnight'] .card-title {
+    @apply font-sans text-sm tracking-wider;
+  }
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl px-3.5 py-2 text-sm font-medium transition
+    @apply inline-flex items-center justify-center gap-2 rounded-card px-3.5 py-2 text-sm font-medium transition
       focus:outline-none focus-visible:ring-2 focus-visible:ring-sky/70 disabled:cursor-not-allowed disabled:opacity-50;
   }
   .btn-primary {
-    @apply btn bg-navy-500 text-white hover:bg-navy-400;
+    @apply btn bg-navy-500 text-white hover:brightness-110;
   }
   .btn-ghost {
-    @apply btn bg-white/5 text-slate-100 hover:bg-white/10;
+    @apply btn bg-white/5 text-ink hover:bg-white/10;
   }
   .btn-accent {
     @apply btn bg-gold text-navy-950 hover:bg-gold-600;
   }
   .input {
-    @apply w-full rounded-xl border border-white/10 bg-navy-950/70 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500
+    @apply w-full rounded-card border border-line/15 bg-navy-950/70 px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-muted/70
       focus:border-sky/60 focus:outline-none focus:ring-2 focus:ring-sky/30;
   }
   .chip {
-    @apply inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-xs font-medium text-slate-200;
+    @apply inline-flex items-center gap-1 rounded-full border border-line/15 bg-white/5 px-2.5 py-0.5 text-xs font-medium text-ink;
   }
   .nav-link {
-    @apply flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-slate-300 transition hover:bg-white/5 hover:text-white;
+    @apply flex items-center gap-3 rounded-card px-3 py-2 text-sm font-medium text-ink-muted transition hover:bg-white/5 hover:text-ink;
   }
   .nav-link-active {
-    @apply bg-navy-700/70 text-white shadow-inner;
+    @apply bg-navy-700/80 text-ink;
+  }
+  :root[data-theme='blueprint'] .nav-link-active {
+    box-shadow: inset 2px 0 0 rgb(var(--c-accent));
   }
   .prose-sb {
-    @apply text-[15px] leading-7 text-slate-200;
+    @apply text-[15px] leading-7 text-ink/90;
   }
   .prose-sb p {
     @apply my-3;
   }
   .prose-sb h2,
-  .prose-sb h3 {
-    @apply mt-6 mb-2 font-semibold text-white;
+  .prose-sb h3,
+  .prose-sb h4,
+  .prose-sb h5 {
+    @apply mt-6 mb-2 font-semibold text-ink;
   }
   .prose-sb ul {
     @apply my-3 list-disc pl-6;
@@ -80,14 +198,24 @@ body {
     @apply text-sky underline underline-offset-2;
   }
   .prose-sb img {
-    @apply my-4 max-w-full rounded-xl;
+    @apply my-4 max-w-full rounded-card;
   }
   .prose-sb table {
     @apply my-4 w-full text-sm;
   }
   .prose-sb td,
   .prose-sb th {
-    @apply border border-white/10 px-2 py-1;
+    @apply border border-line/15 px-2 py-1;
+  }
+  /* Customise mode */
+  .widget-editing {
+    @apply outline outline-1 outline-dashed outline-sky/50;
+  }
+  .widget-dragging {
+    @apply opacity-40;
+  }
+  .widget-over {
+    @apply outline-2 outline-gold;
   }
 }
 
@@ -99,5 +227,5 @@ body {
   left: 1rem;
   top: 1rem;
   z-index: 100;
-  @apply rounded-lg bg-gold px-3 py-2 text-navy-950;
+  @apply rounded-card bg-gold px-3 py-2 text-navy-950;
 }

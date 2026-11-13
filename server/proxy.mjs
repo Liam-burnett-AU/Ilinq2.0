@@ -10,6 +10,7 @@ import https from 'node:https';
 import { createReadStream, existsSync, statSync } from 'node:fs';
 import { extname, join, normalize } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createBrotliDecompress, createGunzip } from 'node:zlib';
 
 const ROOT = join(fileURLToPath(new URL('.', import.meta.url)), '..', 'dist');
 const ORIGIN = new URL(process.env.SCHOOLBOX_ORIGIN || 'https://ilinq.sheldoncollege.com');
@@ -45,6 +46,7 @@ function proxy(req, res) {
     (up) => {
       const out = { ...up.headers };
       delete out['content-security-policy'];
+      delete out['content-security-policy-report-only'];
       delete out['x-frame-options'];
       if (out['set-cookie']) {
         out['set-cookie'] = out['set-cookie'].map((c) =>
@@ -52,8 +54,24 @@ function proxy(req, res) {
         );
       }
       if (out.location && out.location.startsWith(ORIGIN.origin)) out.location = BASE + out.location.slice(ORIGIN.origin.length);
-      res.writeHead(up.statusCode || 502, out);
-      up.pipe(res);
+      const isHtml = /text\/html/i.test(String(out['content-type'] || ''));
+      if (!isHtml) {
+        res.writeHead(up.statusCode || 502, out);
+        up.pipe(res);
+        return;
+      }
+      // Rewrite absolute Schoolbox URLs so embedded classic pages stay on the proxy.
+      const chunks = [];
+      const stream = out['content-encoding'] === 'gzip' ? up.pipe(createGunzip()) : out['content-encoding'] === 'br' ? up.pipe(createBrotliDecompress()) : up;
+      delete out['content-encoding'];
+      delete out['content-length'];
+      stream.on('data', (c) => chunks.push(c));
+      stream.on('end', () => {
+        const appOrigin = `${req.headers['x-forwarded-proto'] || 'http'}://${req.headers.host}`;
+        const html = Buffer.concat(chunks).toString('utf8').split(ORIGIN.origin).join(appOrigin + BASE);
+        res.writeHead(up.statusCode || 502, out);
+        res.end(html);
+      });
     },
   );
   upstream.on('error', (err) => {

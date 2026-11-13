@@ -47,7 +47,7 @@ async function proxy(req: Request, env: Env, url: URL, base: string): Promise<Re
   const out = new Headers();
   up.headers.forEach((v, k) => {
     const key = k.toLowerCase();
-    if (key === 'set-cookie' || key === 'content-security-policy' || key === 'x-frame-options' || key === 'content-encoding' || key === 'content-length') return;
+    if (key === 'set-cookie' || key === 'content-security-policy' || key === 'content-security-policy-report-only' || key === 'x-frame-options' || key === 'content-encoding' || key === 'content-length') return;
     out.set(k, v);
   });
   const cookies = typeof (up.headers as Headers & { getSetCookie?: () => string[] }).getSetCookie === 'function' ? (up.headers as Headers & { getSetCookie: () => string[] }).getSetCookie() : [];
@@ -55,6 +55,19 @@ async function proxy(req: Request, env: Env, url: URL, base: string): Promise<Re
   const loc = up.headers.get('location');
   if (loc && loc.startsWith(origin.origin)) out.set('location', base + loc.slice(origin.origin.length));
 
+  // Classic iLINQ pages are embedded in the app. Rewrite absolute links to the
+  // Schoolbox origin so navigation inside the frame stays on the proxy.
+  const ct = up.headers.get('content-type') || '';
+  if (/text\/html/i.test(ct) && up.body) {
+    const html = await up.text();
+    const appOrigin = url.origin;
+    const rewritten = html
+      .split(origin.origin)
+      .join(appOrigin + base)
+      .split(origin.origin.replace(/^https?:/, ''))
+      .join(appOrigin.replace(/^https?:/, '') + base);
+    return new Response(rewritten, { status: up.status, statusText: up.statusText, headers: out });
+  }
   return new Response(up.body, { status: up.status, statusText: up.statusText, headers: out });
 }
 

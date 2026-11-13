@@ -24,7 +24,7 @@ export default function DueWorkPage() {
         title="Due work"
         subtitle={cal.loading ? 'Loading…' : `${total} outstanding · ${buckets.done.length} completed · from 3 weeks ago to 2 months ahead`}
         actions={
-          <label className="flex items-center gap-2 text-sm text-slate-300">
+          <label className="flex items-center gap-2 text-sm text-ink/80">
             <input type="checkbox" className="accent-gold" checked={showDone} onChange={(e) => setShowDone(e.target.checked)} /> Show completed
           </label>
         }
@@ -52,7 +52,7 @@ export default function DueWorkPage() {
             ))}
         </div>
       )}
-      <p className="mt-6 text-xs text-slate-500">
+      <p className="mt-6 text-xs text-ink-muted/80">
         Due work is read from the iLINQ calendar feed. Open an item to submit or view feedback in classic iLINQ.
       </p>
     </div>

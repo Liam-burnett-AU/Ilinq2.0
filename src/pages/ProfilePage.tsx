@@ -44,18 +44,18 @@ export default function ProfilePage() {
       <PageHeader title="Profile & settings" />
       <Card>
         <div className="flex items-center gap-4">
-          <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-navy-700 text-xl font-semibold text-sky">
+          <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-card bg-navy-700 text-xl font-semibold text-sky">
             {avatar ? <img src={avatar} alt="" className="h-full w-full object-cover" /> : (user.preferredName || user.firstName)[0]}
           </div>
           <div className="min-w-0">
-            <h2 className="truncate text-xl font-semibold text-white">{user.fullName || `${user.firstName} ${user.lastName ?? ''}`}</h2>
-            <p className="text-sm text-slate-400">
+            <h2 className="truncate text-xl font-semibold text-ink">{user.fullName || `${user.firstName} ${user.lastName ?? ''}`}</h2>
+            <p className="text-sm text-ink-muted">
               {user.role.name}
               {user.yearLevel ? ` · ${user.yearLevel.name}` : ''}
               {user.schoolHouse ? ` · ${user.schoolHouse.name} House` : ''}
               {user.positionTitle ? ` · ${user.positionTitle}` : ''}
             </p>
-            <p className="font-mono text-xs text-slate-500">
+            <p className="font-mono text-xs text-ink-muted/80">
               {user.username}
               {user.email ? ` · ${user.email}` : ''}
               {user.campus?.length ? ` · ${user.campus.map((c) => c.name).join(', ')}` : ''}
@@ -63,31 +63,31 @@ export default function ProfilePage() {
           </div>
         </div>
         <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-3">
-          <div className="rounded-xl bg-white/[0.03] p-3">
-            <dt className="text-xs uppercase tracking-wider text-slate-500">Data source</dt>
-            <dd className="mt-1 text-white">{api.kind === 'demo' ? 'Demo fixtures' : config.schoolboxOrigin.replace(/^https?:\/\//, '')}</dd>
+          <div className="rounded-card bg-white/[0.03] p-3">
+            <dt className="text-xs uppercase tracking-wider text-ink-muted/80">Data source</dt>
+            <dd className="mt-1 text-ink">{api.kind === 'demo' ? 'Demo fixtures' : config.schoolboxOrigin.replace(/^https?:\/\//, '')}</dd>
           </div>
-          <div className="rounded-xl bg-white/[0.03] p-3">
-            <dt className="text-xs uppercase tracking-wider text-slate-500">Signed in as</dt>
-            <dd className="mt-1 text-white">{session?.role}</dd>
+          <div className="rounded-card bg-white/[0.03] p-3">
+            <dt className="text-xs uppercase tracking-wider text-ink-muted/80">Signed in as</dt>
+            <dd className="mt-1 text-ink">{session?.role}</dd>
           </div>
-          <div className="rounded-xl bg-white/[0.03] p-3">
-            <dt className="text-xs uppercase tracking-wider text-slate-500">Timetable cycle</dt>
-            <dd className="mt-1 text-white">{user.campus?.[0]?.days ? `${user.campus[0].days} days` : '—'}</dd>
+          <div className="rounded-card bg-white/[0.03] p-3">
+            <dt className="text-xs uppercase tracking-wider text-ink-muted/80">Timetable cycle</dt>
+            <dd className="mt-1 text-ink">{user.campus?.[0]?.days ? `${user.campus[0].days} days` : '—'}</dd>
           </div>
         </dl>
       </Card>
 
       {user.role.type === 'parent' && (
         <Card title="Your students">
-          <ul className="grid gap-2 sm:grid-cols-2">
+          <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             {(user.students ?? []).map((s) => (
               <li key={s.id}>
-                <button onClick={() => setViewAs(s)} className={`flex w-full items-center gap-3 rounded-xl border px-3 py-2.5 text-left ${viewAs?.id === s.id ? 'border-sky/50 bg-navy-700/50' : 'border-white/5 bg-white/[0.02]'}`}>
+                <button onClick={() => setViewAs(s)} className={`flex w-full items-center gap-3 rounded-card border px-3 py-2.5 text-left ${viewAs?.id === s.id ? 'border-sky/50 bg-navy-700/50' : 'border-line/10 bg-white/[0.02]'}`}>
                   <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-navy-700 text-sky">{(s.givenName || s.firstname)[0]}</span>
                   <span className="flex-1">
-                    <span className="block text-sm font-medium text-white">{s.fullName}</span>
-                    <span className="block text-xs text-slate-400">{s.role.name}</span>
+                    <span className="block text-sm font-medium text-ink">{s.fullName}</span>
+                    <span className="block text-xs text-ink-muted">{s.role.name}</span>
                   </span>
                   {viewAs?.id === s.id && <span className="chip !border-gold/50 text-gold">Viewing</span>}
                 </button>
@@ -99,7 +99,7 @@ export default function ProfilePage() {
 
       {user.role.type === 'student' && user.guardians?.length ? (
         <Card title="Guardians">
-          <ul className="text-sm text-slate-200">
+          <ul className="text-sm text-ink/90">
             {user.guardians.map((g) => (
               <li key={g.id}>{g.fullName}</li>
             ))}
@@ -108,7 +108,7 @@ export default function ProfilePage() {
       ) : null}
 
       <Card title="API token for this app" action={<KeyRound className="h-4 w-4 text-sky" />}>
-        <p className="text-sm text-slate-300">
+        <p className="text-sm text-ink/80">
           Generate a scoped Schoolbox token so you can sign in to iLINQ 2.0 without a password (for example on a phone). Tokens expire after at most 12 months and can be revoked in classic iLINQ.
         </p>
         <div className="mt-3 grid gap-3 sm:grid-cols-[1fr_120px_auto]">
@@ -124,7 +124,7 @@ export default function ProfilePage() {
             Create token
           </button>
         </div>
-        <ul className="mt-3 grid gap-1 text-xs text-slate-400 sm:grid-cols-2">
+        <ul className="mt-3 grid gap-1 text-xs text-ink-muted sm:grid-cols-2">
           {SCOPES.map(([s, label]) => (
             <li key={s} className="flex items-center gap-2">
               <span className="h-1.5 w-1.5 rounded-full bg-sky" /> {label}
@@ -133,10 +133,10 @@ export default function ProfilePage() {
         </ul>
         {err && <p className="mt-3 text-sm text-red-200">{err}</p>}
         {created?.token && (
-          <div className="mt-3 rounded-xl border border-gold/30 bg-gold/5 p-3">
+          <div className="mt-3 rounded-card border border-gold/30 bg-gold/5 p-3">
             <p className="text-xs text-gold">Copy this now. It will not be shown again.</p>
             <div className="mt-1 flex items-start gap-2">
-              <code className="flex-1 break-all font-mono text-xs text-white">{created.token}</code>
+              <code className="flex-1 break-all font-mono text-xs text-ink">{created.token}</code>
               <button className="btn-ghost !px-2" onClick={() => navigator.clipboard.writeText(created.token!)} aria-label="Copy token">
                 <Copy className="h-4 w-4" />
               </button>

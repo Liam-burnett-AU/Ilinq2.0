@@ -1,5 +1,21 @@
 # Design notes
 
+## Themes
+
+Colours are CSS variables (`--c-*` as "r g b" triplets) consumed by Tailwind
+as `rgb(var(--c-x) / alpha)`, so every utility class retheme at runtime.
+Defined in `src/index.css`; selected by `data-theme` on `<html>` from
+`PrefsContext`.
+
+| Theme | Idea | Display font | Card |
+|---|---|---|---|
+| Blueprint (default) | Engineering drawing on navy grid paper; hairline sky rules; corner ticks; gold reserved for live markers | Space Grotesk | 6px radius, corner brackets |
+| Midnight | Soft rounded cards on deep navy (the original look) | Inter | 16px radius |
+| Ink | Near-black, editorial serif headings, sharp edges | Fraunces | 2px radius |
+
+Add a theme by adding a `:root[data-theme='x']` block and an entry in `THEMES`.
+
+
 **Palette (Sheldon College, dark mode only)**
 
 | Token | Hex | Use |

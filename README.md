@@ -9,10 +9,13 @@ nothing to migrate and no second login. Classic iLINQ keeps working alongside it
 |---|---|
 | **Stack** | Vite 5 · React 18 · TypeScript · Tailwind CSS · react-router · date-fns |
 | **Data** | Schoolbox REST API (session cookie or scoped JWT), through a same-origin proxy (Node server or Cloudflare Worker) |
-| **Design** | Dark mode only, Sheldon College palette (`#00295c` / `#a3c1e7` / `#fbd708` sparingly), designated logo slot |
+| **Design** | Dark only. Default "Blueprint" theme (grid paper, hairline rules, corner-tick cards, Space Grotesk) in the Sheldon College palette (`#00295c` / `#a3c1e7` / `#fbd708` sparingly); Midnight and Ink alternatives; designated logo slot |
 | **Offline dev** | Built-in demo mode with fixtures in the exact API response shapes |
 
 ## What's better than classic iLINQ
+
+- **Everything in iLINQ is reachable.** Each class and group has its own page (due work, next lessons, resources, class news) with the *full classic class page embedded underneath*, served through the proxy so it is the real thing with your session. Messages, notifications, ePortfolio, reports, files and the classic calendar are embedded the same way under *iLINQ pages* in the sidebar.
+- **Your layout, your look.** Open *Customise* to pick a theme (Blueprint, Midnight, Ink), reorder widgets by drag and drop or arrows, resize them to half or full width, hide the ones you don't want, hide nav items, and switch density. Saved on your device.
 
 - **Today view that answers "what's next?"** Current/next class with minutes remaining, due work sorted into overdue / today / this week, today's events, latest unread news, all on one screen.
 - **Real timetable grid** built from the calendar feed, with a live "now" line, due-work chips on each day, and a day-picker list on phones.
@@ -74,6 +77,7 @@ scoped token and copies it to your clipboard.
 
 ```
 src/
+  prefs/      PrefsContext: theme, widget layout, hidden nav (localStorage)
   api/        Schoolbox client, typed endpoints, adapters, demo fixtures
   auth/       AuthContext: session, user profile, parent "view as child"
   components/ Shell (sidebar / bottom tabs), command palette, UI primitives, LogoSlot
@@ -93,6 +97,15 @@ Scripts: `npm run dev`, `npm run build`, `npm test`, `npm run lint` (tsc), `npm 
 Drop the official logo at `public/sheldon-logo.svg` (or `.png` and update
 `LogoSlot.tsx`). The `LogoSlot` component reserves the space on the login page,
 sidebar and mobile header; until the file exists a neutral monogram is shown.
+
+### Embedded classic pages
+
+`ClassicFrame` loads `/sb/<path>` in an iframe. Both proxies strip
+`X-Frame-Options`/CSP from Schoolbox responses and rewrite absolute
+`https://ilinq.sheldoncollege.com/...` URLs inside HTML to the proxy path, so
+navigation inside the frame stays on the app origin and keeps the session.
+If a Schoolbox page insists on breaking out of frames, use the "open in new
+tab" button in the frame header.
 
 ## Known limits
 

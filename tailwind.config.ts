@@ -1,9 +1,9 @@
 import type { Config } from 'tailwindcss';
 
-// Sheldon College palette (dark mode only).
-//   Primary   #00295c  navy
-//   Secondary #a3c1e7  light blue
-//   Accent    #fbd708  gold (used sparingly)
+// Colours are CSS variables (see src/index.css) so themes can swap them at
+// runtime while every utility class keeps working with Tailwind alpha syntax.
+const v = (name: string) => `rgb(var(--c-${name}) / <alpha-value>)`;
+
 export default {
   darkMode: 'class',
   content: ['./index.html', './src/**/*.{ts,tsx}'],
@@ -15,28 +15,27 @@ export default {
           100: '#d9e4f4',
           200: '#a3c1e7',
           300: '#7aa5da',
-          400: '#4f82c4',
-          500: '#2a5fa3',
+          400: v('primary-strong'),
+          500: v('primary-strong'),
           600: '#1a477f',
-          700: '#0f3568',
-          800: '#00295c',
-          900: '#071d3f',
-          950: '#04122a',
+          700: v('nav-active'),
+          800: v('primary'),
+          900: v('surface'),
+          950: v('bg'),
         },
-        sky: {
-          DEFAULT: '#a3c1e7',
-        },
-        gold: {
-          DEFAULT: '#fbd708',
-          600: '#d9b800',
-        },
+        sky: { DEFAULT: v('secondary') },
+        gold: { DEFAULT: v('accent'), 600: v('accent-deep') },
+        ink: { DEFAULT: v('text'), muted: v('muted') },
+        line: { DEFAULT: v('border') },
       },
       fontFamily: {
-        sans: ['"Inter"', 'system-ui', '-apple-system', '"Segoe UI"', 'Roboto', 'sans-serif'],
-        mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
+        sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
+        display: ['var(--font-display)', 'var(--font-sans)', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-mono)', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
       },
+      borderRadius: { card: 'var(--radius-card)' },
       boxShadow: {
-        card: '0 1px 0 0 rgba(163,193,231,0.08), 0 8px 24px -12px rgba(0,0,0,0.6)',
+        card: 'var(--shadow-card)',
       },
       keyframes: {
         'fade-up': { '0%': { opacity: '0', transform: 'translateY(6px)' }, '100%': { opacity: '1', transform: 'none' } },

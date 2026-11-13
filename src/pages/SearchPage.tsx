@@ -37,12 +37,12 @@ export default function SearchPage() {
     <div>
       <PageHeader title="Search" subtitle="Everything in iLINQ: news, class pages, files, assessments and people" />
       <form onSubmit={submit} className="relative mb-4">
-        <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+        <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-muted/80" />
         <input className="input !pl-10" value={draft} onChange={(e) => setDraft(e.target.value)} placeholder="Search…" autoFocus aria-label="Search" />
       </form>
       <div className="mb-4 flex flex-wrap gap-2">
         {TYPE_FILTERS.map((f, i) => (
-          <button key={f.label} className={`chip ${filterIdx === i ? '!border-sky/50 !bg-navy-700/70 text-white' : ''}`} onClick={() => setFilterIdx(i)}>
+          <button key={f.label} className={`chip ${filterIdx === i ? '!border-sky/50 !bg-navy-700/70 text-ink' : ''}`} onClick={() => setFilterIdx(i)}>
             {f.label}
           </button>
         ))}
@@ -69,16 +69,16 @@ export default function SearchPage() {
                   <Icon className="h-4 w-4" />
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="block truncate text-sm font-medium text-white">{r.title}</span>
-                  <span className="block truncate text-xs text-slate-400">
+                  <span className="block truncate text-sm font-medium text-ink">{r.title}</span>
+                  <span className="block truncate text-xs text-ink-muted">
                     {[r.meta, r.context?.map((c) => c.name).join(' › '), r.date ? format(new Date(r.date), 'd MMM yyyy') : null].filter(Boolean).join(' · ')}
                   </span>
-                  {r.description && <span className="mt-0.5 line-clamp-2 block text-xs text-slate-500">{r.description}</span>}
+                  {r.description && <span className="mt-0.5 line-clamp-2 block text-xs text-ink-muted/80">{r.description}</span>}
                 </span>
-                {!internal && <ExternalLink className="h-4 w-4 shrink-0 text-slate-500" />}
+                {!internal && <ExternalLink className="h-4 w-4 shrink-0 text-ink-muted/80" />}
               </>
             );
-            const cls = 'flex items-center gap-3 rounded-xl border border-white/5 bg-white/[0.02] px-3 py-2.5 transition hover:bg-white/[0.06]';
+            const cls = 'flex items-center gap-3 rounded-card border border-line/10 bg-white/[0.02] px-3 py-2.5 transition hover:bg-white/[0.06]';
             return (
               <li key={`${r.type}-${r.id}`}>
                 {internal ? (

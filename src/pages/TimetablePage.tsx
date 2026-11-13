@@ -53,7 +53,7 @@ export default function TimetablePage() {
       <div className="lg:hidden">
         <div className="mb-3 grid grid-cols-5 gap-1">
           {days.map((d) => (
-            <button key={d.toISOString()} onClick={() => setSelected(d)} className={`rounded-xl py-2 text-center ${isSameDay(d, selected) ? 'bg-navy-700 text-white' : 'bg-white/5 text-slate-300'}`}>
+            <button key={d.toISOString()} onClick={() => setSelected(d)} className={`rounded-card py-2 text-center ${isSameDay(d, selected) ? 'bg-navy-700 text-ink' : 'bg-white/5 text-ink/80'}`}>
               <span className="block text-[11px] uppercase tracking-wider">{format(d, 'EEE')}</span>
               <span className={`block text-lg font-semibold ${isToday(d) ? 'text-gold' : ''}`}>{format(d, 'd')}</span>
             </button>
@@ -75,12 +75,12 @@ export default function TimetablePage() {
 
       {/* Desktop: week grid */}
       <div className="card hidden overflow-hidden lg:block">
-        <div className="grid grid-cols-[56px_repeat(5,minmax(0,1fr))] border-b border-white/5">
+        <div className="grid grid-cols-[56px_repeat(5,minmax(0,1fr))] border-b border-line/10">
           <div />
           {days.map((d) => (
             <div key={d.toISOString()} className={`min-w-0 overflow-hidden px-3 py-2 text-center ${isToday(d) ? 'bg-navy-800/60' : ''}`}>
-              <div className="text-[11px] uppercase tracking-wider text-slate-400">{format(d, 'EEEE')}</div>
-              <div className={`text-lg font-semibold ${isToday(d) ? 'text-gold' : 'text-white'}`}>{format(d, 'd MMM')}</div>
+              <div className="text-[11px] uppercase tracking-wider text-ink-muted">{format(d, 'EEEE')}</div>
+              <div className={`text-lg font-semibold ${isToday(d) ? 'text-gold' : 'text-ink'}`}>{format(d, 'd MMM')}</div>
               <div className="mt-1 flex flex-wrap justify-center gap-1">
                 {onDay(cal.events, d)
                   .filter((e) => e.kind === 'dueWork' || e.kind === 'event')
@@ -92,7 +92,7 @@ export default function TimetablePage() {
                     </span>
                   ))}
                 {onDay(cal.events, d).filter((e) => e.kind === 'dueWork' || e.kind === 'event').length > 4 && (
-                  <span className="text-[10px] text-slate-500">+{onDay(cal.events, d).filter((e) => e.kind === 'dueWork' || e.kind === 'event').length - 4} more</span>
+                  <span className="text-[10px] text-ink-muted/80">+{onDay(cal.events, d).filter((e) => e.kind === 'dueWork' || e.kind === 'event').length - 4} more</span>
                 )}
               </div>
             </div>
@@ -102,7 +102,7 @@ export default function TimetablePage() {
           {/* hour labels + lines */}
           <div className="relative">
             {hours.map((h) => (
-              <div key={h} className="absolute -translate-y-1/2 pr-2 text-right font-mono text-[10px] text-slate-500" style={{ top: (h - DAY_START) * PX_PER_HOUR, width: 56 }}>
+              <div key={h} className="absolute -translate-y-1/2 pr-2 text-right font-mono text-[10px] text-ink-muted/80" style={{ top: (h - DAY_START) * PX_PER_HOUR, width: 56 }}>
                 {format(new Date(2000, 0, 1, h), 'h a')}
               </div>
             ))}
@@ -110,9 +110,9 @@ export default function TimetablePage() {
           {days.map((d) => {
             const items = classesOn(cal.events, d);
             return (
-              <div key={d.toISOString()} className={`relative border-l border-white/5 ${isToday(d) ? 'bg-navy-800/30' : ''}`}>
+              <div key={d.toISOString()} className={`relative border-l border-line/10 ${isToday(d) ? 'bg-navy-800/30' : ''}`}>
                 {hours.map((h) => (
-                  <div key={h} className="absolute inset-x-0 border-t border-white/5" style={{ top: (h - DAY_START) * PX_PER_HOUR }} />
+                  <div key={h} className="absolute inset-x-0 border-t border-line/10" style={{ top: (h - DAY_START) * PX_PER_HOUR }} />
                 ))}
                 {isToday(d) && now.getHours() >= DAY_START && now.getHours() < DAY_END && (
                   <div className="absolute inset-x-0 z-10 border-t-2 border-gold" style={{ top: pos(now) }}>
@@ -135,9 +135,9 @@ export default function TimetablePage() {
                       style={{ top, height, background: withAlpha(readableAccent(e.colour), 0.22), borderColor: withAlpha(readableAccent(e.colour), 0.6) }}
                       title={`${e.title}\n${format(e.start, 'h:mm')}–${format(e.end, 'h:mm a')}${e.location ? `\n${e.location}` : ''}`}
                     >
-                      <div className={`truncate font-medium text-white ${tiny ? 'text-[9px]' : ''}`}>{e.title}{tiny && e.location ? ` · ${e.location}` : ''}</div>
-                      {height > 36 && <div className="truncate text-[11px] text-slate-200/80">{[e.location, subline(e)].filter(Boolean).join(' · ')}</div>}
-                      {height > 52 && <div className="font-mono text-[10px] text-slate-300/70">{format(e.start, 'h:mm')}–{format(e.end, 'h:mm')}</div>}
+                      <div className={`truncate font-medium text-ink ${tiny ? 'text-[9px]' : ''}`}>{e.title}{tiny && e.location ? ` · ${e.location}` : ''}</div>
+                      {height > 36 && <div className="truncate text-[11px] text-ink/90/80">{[e.location, subline(e)].filter(Boolean).join(' · ')}</div>}
+                      {height > 52 && <div className="font-mono text-[10px] text-ink/80/70">{format(e.start, 'h:mm')}–{format(e.end, 'h:mm')}</div>}
                     </Tag>
                   );
                 })}

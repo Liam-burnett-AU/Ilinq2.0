@@ -28,7 +28,7 @@ export default function FeedbackPage() {
       <ErrorBanner error={q.error} onRetry={q.refresh} />
       <div className="mb-4 flex flex-wrap gap-2">
         {(['all', 'feedback', 'badge', 'moment'] as Filter[]).map((f) => (
-          <button key={f} className={`chip ${filter === f ? '!border-sky/50 !bg-navy-700/70 text-white' : ''}`} onClick={() => setFilter(f)}>
+          <button key={f} className={`chip ${filter === f ? '!border-sky/50 !bg-navy-700/70 text-ink' : ''}`} onClick={() => setFilter(f)}>
             {f === 'all' ? 'Everything' : f === 'feedback' ? 'Due work feedback' : f === 'badge' ? 'Badges' : 'Learning moments'}
           </button>
         ))}
@@ -41,7 +41,7 @@ export default function FeedbackPage() {
       ) : items.length === 0 ? (
         <EmptyState title="Nothing here yet" hint="Feedback appears once teachers mark due work or post a learning moment." />
       ) : (
-        <ol className="relative space-y-3 border-l border-white/10 pl-5">
+        <ol className="relative space-y-3 border-l border-line/15 pl-5">
           {items.map((it, i) => {
             const k = kindOf(it);
             const o = it.object;
@@ -53,26 +53,26 @@ export default function FeedbackPage() {
             const link = api.absolute(o._links?.summary);
             return (
               <li key={`${k}-${o.id ?? i}`} className="relative">
-                <span className={`absolute -left-[29px] top-3 flex h-5 w-5 items-center justify-center rounded-full ring-4 ring-navy-950 ${k === 'badge' ? 'bg-gold text-navy-950' : 'bg-navy-600 text-white'}`}>
+                <span className={`absolute -left-[29px] top-3 flex h-5 w-5 items-center justify-center rounded-full ring-4 ring-navy-950 ${k === 'badge' ? 'bg-gold text-navy-950' : 'bg-navy-600 text-ink'}`}>
                   <Icon className="h-3 w-3" />
                 </span>
                 <Card>
                   <div className="flex flex-wrap items-baseline justify-between gap-2">
-                    <h3 className="text-base font-semibold text-white">
+                    <h3 className="text-base font-semibold text-ink">
                       {k === 'badge' ? (o.name as string) || (o.title as string) : k === 'feedback' ? o.assessment?.title || 'Feedback' : 'Learning moment'}
                     </h3>
-                    <span className="font-mono text-xs text-slate-500">{format(new Date(it.date), 'd MMM yyyy')}</span>
+                    <span className="font-mono text-xs text-ink-muted/80">{format(new Date(it.date), 'd MMM yyyy')}</span>
                   </div>
                   {k === 'feedback' && (
-                    <p className="mt-0.5 text-xs text-slate-400">
+                    <p className="mt-0.5 text-xs text-ink-muted">
                       {[folder, o.assessment?.workType].filter(Boolean).join(' · ')}
                       {o.mark ? ' · Mark: ' : ''}
                       {o.mark && <span className="font-mono font-semibold text-gold">{o.mark}</span>}
                       {!o.mark && typeof o.normalisedMark === 'number' && <span className="font-mono font-semibold text-gold"> · {o.normalisedMark}</span>}
                     </p>
                   )}
-                  {text && <p className="mt-2 whitespace-pre-line text-sm leading-6 text-slate-200">{text}</p>}
-                  <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-slate-400">
+                  {text && <p className="mt-2 whitespace-pre-line text-sm leading-6 text-ink/90">{text}</p>}
+                  <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-ink-muted">
                     {teacher && <span>{teacher}</span>}
                     {o.tags?.map((t) => (
                       <span key={t.name} className="chip">

@@ -34,6 +34,10 @@ export interface PortalApi {
   getNewsFeed(topic?: string): Promise<NewsFeedItem[]>;
   getNewsTopics(): Promise<NewsTopic[]>;
   getNewsArticle(id: number): Promise<NewsArticleResponse>;
+  /** Articles audienced to a class/group page. */
+  getFolderNews(folderId: number): Promise<NewsFeedItem[]>;
+  /** Search within a class/group page (files, pages, assessments…). */
+  searchFolder(folderId: number, keyword: string, limit?: number): Promise<SearchResultList>;
   getSavedNews(): Promise<number[]>;
   saveNews(id: number): Promise<void>;
   unsaveNews(id: number): Promise<void>;
@@ -104,6 +108,12 @@ export class LiveApi implements PortalApi {
   }
   getNewsArticle(id: number) {
     return this.client.get<NewsArticleResponse>(`/news/${id}`);
+  }
+  getFolderNews(folderId: number) {
+    return this.client.get<NewsFeedItem[]>(`/news/lists/folder/${folderId}`);
+  }
+  searchFolder(folderId: number, keyword: string, limit = 50) {
+    return this.client.get<SearchResultList>(`/api/search/folder/${folderId}`, { keyword, limit });
   }
   getSavedNews() {
     return this.client.get<number[]>('/news/saved');

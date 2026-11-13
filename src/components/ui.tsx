@@ -8,7 +8,7 @@ export function Spinner({ className = '' }: { className?: string }) {
 
 export function FullPageSpinner({ label }: { label?: string }) {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center gap-3 text-slate-300" role="status">
+    <div className="flex min-h-screen flex-col items-center justify-center gap-3 text-ink/80" role="status">
       <Spinner className="h-8 w-8" />
       {label && <p className="text-sm">{label}</p>}
     </div>
@@ -17,10 +17,10 @@ export function FullPageSpinner({ label }: { label?: string }) {
 
 export function Card({ title, action, children, className = '', padded = true }: { title?: ReactNode; action?: ReactNode; children: ReactNode; className?: string; padded?: boolean }) {
   return (
-    <section className={`card animate-fade-up ${padded ? 'card-pad' : ''} ${className}`}>
+    <section className={`card min-w-0 animate-fade-up ${padded ? 'card-pad' : ''} ${className}`}>
       {(title || action) && (
         <header className={`mb-3 flex items-center justify-between gap-3 ${padded ? '' : 'px-4 pt-4 sm:px-5 sm:pt-5'}`}>
-          {title && <h2 className="text-sm font-semibold uppercase tracking-wider text-sky/90">{title}</h2>}
+          {title && <h2 className="card-title">{title}</h2>}
           {action}
         </header>
       )}
@@ -31,9 +31,9 @@ export function Card({ title, action, children, className = '', padded = true }:
 
 export function EmptyState({ icon = <Inbox className="h-6 w-6" />, title, hint }: { icon?: ReactNode; title: string; hint?: string }) {
   return (
-    <div className="flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-white/10 px-4 py-8 text-center text-slate-400">
+    <div className="flex flex-col items-center justify-center gap-2 rounded-card border border-dashed border-line/15 px-4 py-8 text-center text-ink-muted">
       <div className="text-sky/70">{icon}</div>
-      <p className="text-sm font-medium text-slate-300">{title}</p>
+      <p className="text-sm font-medium text-ink/80">{title}</p>
       {hint && <p className="max-w-xs text-xs">{hint}</p>}
     </div>
   );
@@ -49,7 +49,7 @@ export function ErrorBanner({ error, onRetry }: { error: Error | null; onRetry?:
         ? 'The proxy could not reach ilinq.sheldoncollege.com. Check SCHOOLBOX_ORIGIN and your network.'
         : undefined;
   return (
-    <div role="alert" className="flex items-start gap-3 rounded-xl border border-red-400/30 bg-red-950/40 p-3 text-sm text-red-100">
+    <div role="alert" className="flex items-start gap-3 rounded-card border border-red-400/30 bg-red-950/40 p-3 text-sm text-red-100">
       <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-300" />
       <div className="flex-1">
         <p className="font-medium">{detail}</p>
@@ -68,8 +68,8 @@ export function PageHeader({ title, subtitle, actions }: { title: string; subtit
   return (
     <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight text-white sm:text-3xl">{title}</h1>
-        {subtitle && <p className="mt-1 text-sm text-slate-400">{subtitle}</p>}
+        <h1 className="text-2xl font-semibold tracking-tight text-ink sm:text-3xl">{title}</h1>
+        {subtitle && <p className="mt-1 text-sm text-ink-muted">{subtitle}</p>}
       </div>
       {actions && <div className="flex items-center gap-2">{actions}</div>}
     </div>

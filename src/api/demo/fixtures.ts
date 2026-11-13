@@ -443,3 +443,18 @@ export const DEMO_SEARCH: SearchResult[] = [
   { id: 2, type: 'user.staff', url: '/search/user/2', title: 'Ms Rebecca White', meta: 'Head of English', icon: 'user' },
   { id: 7, type: 'user.staff', url: '/search/user/7', title: 'Mr Kwame Osei', meta: 'Design & Robotics', icon: 'user' },
 ];
+
+/** Items inside a class page, as /api/search/folder/{id} returns them. */
+export const DEMO_FOLDER_ITEMS = (folderId: number): SearchResult[] => {
+  const s = SUBJECTS.find((x) => x.folderId === folderId);
+  const name = s?.name ?? 'Group';
+  return [
+    { id: folderId * 10 + 1, type: 'page.unit', url: `/homepage/${folderId}/unit-1`, title: `${name}: Term 4 Unit Outline`, meta: 'Unit', icon: 'home' },
+    { id: folderId * 10 + 2, type: 'file.document', url: `/send.php?id=${folderId * 10 + 2}&save=1`, title: `${name} - Assessment 4.1 Task Sheet.pdf`, meta: 'Assessment', icon: 'document', date: daysAgo(12) },
+    { id: folderId * 10 + 3, type: 'file.document', url: `/send.php?id=${folderId * 10 + 3}&save=1`, title: 'Week 6 Lesson Slides.pptx', meta: 'Resources', icon: 'document', date: daysAgo(2) },
+    { id: folderId * 10 + 4, type: 'assessment.dueWork', url: `/learning/assessments/${folderId * 10 + 4}`, title: 'Checkpoint 2', meta: 'Class Work', icon: 'due-work', date: daysAgo(-5) },
+    { id: folderId * 10 + 5, type: 'link', url: 'https://www.qcaa.qld.edu.au', title: 'QCAA syllabus', meta: 'Links', icon: 'link' },
+    { id: folderId * 10 + 6, type: 'forum', url: `/homepage/${folderId}/discussion`, title: 'Class discussion', meta: 'Discussion', icon: 'forum' },
+    { id: folderId * 10 + 7, type: 'file.video', url: `/send.php?id=${folderId * 10 + 7}`, title: 'Revision walkthrough.mp4', meta: 'Resources', icon: 'video', date: daysAgo(6) },
+  ];
+};

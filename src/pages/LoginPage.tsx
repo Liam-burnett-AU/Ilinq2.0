@@ -52,14 +52,14 @@ export default function LoginPage() {
           <LogoSlot size="lg" />
         </div>
         <div className="card card-pad">
-          <h1 className="text-xl font-semibold text-white">Sign in to iLINQ</h1>
-          <p className="mt-1 text-sm text-slate-400">
+          <h1 className="text-xl font-semibold text-ink">Sign in to iLINQ</h1>
+          <p className="mt-1 text-sm text-ink-muted">
             Students and staff use their College network login. Parents use their iLINQ parent account.
           </p>
 
-          <div className="mt-4 grid grid-cols-2 gap-1 rounded-xl bg-white/5 p-1 text-sm" role="tablist">
+          <div className="mt-4 grid grid-cols-2 gap-1 rounded-card bg-white/5 p-1 text-sm" role="tablist">
             {(['password', 'token'] as const).map((t) => (
-              <button key={t} role="tab" aria-selected={tab === t} className={`rounded-lg py-1.5 transition ${tab === t ? 'bg-navy-700 text-white' : 'text-slate-400 hover:text-white'}`} onClick={() => setTab(t)}>
+              <button key={t} role="tab" aria-selected={tab === t} className={`rounded-lg py-1.5 transition ${tab === t ? 'bg-navy-700 text-ink' : 'text-ink-muted hover:text-ink'}`} onClick={() => setTab(t)}>
                 {t === 'password' ? 'Username & password' : 'API token'}
               </button>
             ))}
@@ -69,19 +69,19 @@ export default function LoginPage() {
             {tab === 'password' ? (
               <>
                 <label className="block text-sm">
-                  <span className="mb-1 block text-slate-300">Username</span>
+                  <span className="mb-1 block text-ink/80">Username</span>
                   <input className="input" autoComplete="username" autoCapitalize="none" value={username} onChange={(e) => setUsername(e.target.value)} required />
                 </label>
                 <label className="block text-sm">
-                  <span className="mb-1 block text-slate-300">Password</span>
+                  <span className="mb-1 block text-ink/80">Password</span>
                   <input className="input" type="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                 </label>
               </>
             ) : (
               <label className="block text-sm">
-                <span className="mb-1 block text-slate-300">Schoolbox JWT</span>
+                <span className="mb-1 block text-ink/80">Schoolbox JWT</span>
                 <textarea className="input min-h-[96px] font-mono text-xs" value={jwt} onChange={(e) => setJwt(e.target.value)} placeholder="eyJhbGciOi…" required />
-                <span className="mt-1 block text-xs text-slate-500">
+                <span className="mt-1 block text-xs text-ink-muted/80">
                   Create one in classic iLINQ under your profile → Tokens (needs the <code className="font-mono">session</code> scope).
                 </span>
               </label>
@@ -92,16 +92,16 @@ export default function LoginPage() {
               </p>
             )}
             <button className="btn-primary w-full" disabled={busy}>
-              {busy ? <Spinner className="text-white" /> : tab === 'password' ? <ArrowRight className="h-4 w-4" /> : <KeyRound className="h-4 w-4" />}
+              {busy ? <Spinner className="text-ink" /> : tab === 'password' ? <ArrowRight className="h-4 w-4" /> : <KeyRound className="h-4 w-4" />}
               {busy ? 'Signing in…' : 'Sign in'}
             </button>
           </form>
 
-          <div className="mt-4 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400">
-            <a className="hover:text-white" href={config.schoolboxOrigin} target="_blank" rel="noreferrer">
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-2 text-xs text-ink-muted">
+            <a className="hover:text-ink" href={config.schoolboxOrigin} target="_blank" rel="noreferrer">
               Forgot password? Reset on classic iLINQ
             </a>
-            <a className="hover:text-white" href={config.schoolboxOrigin} target="_blank" rel="noreferrer">
+            <a className="hover:text-ink" href={config.schoolboxOrigin} target="_blank" rel="noreferrer">
               Open classic iLINQ
             </a>
           </div>
@@ -109,8 +109,8 @@ export default function LoginPage() {
 
         <div className="mt-4 card card-pad flex items-center justify-between gap-3">
           <div>
-            <p className="text-sm font-medium text-white">Just looking?</p>
-            <p className="text-xs text-slate-400">Explore with sample data. Nothing is sent to iLINQ.</p>
+            <p className="text-sm font-medium text-ink">Just looking?</p>
+            <p className="text-xs text-ink-muted">Explore with sample data. Nothing is sent to iLINQ.</p>
           </div>
           <div className="flex gap-2">
             <button className="btn-ghost" onClick={() => startDemo('student').then(go)}>
@@ -121,7 +121,7 @@ export default function LoginPage() {
             </button>
           </div>
         </div>
-        <p className="mt-6 text-center text-xs text-slate-500">
+        <p className="mt-6 text-center text-xs text-ink-muted/80">
           iLINQ 2.0 is an independent front end for {config.schoolName}'s Schoolbox portal. Your credentials go straight to ilinq.sheldoncollege.com.
         </p>
       </div>

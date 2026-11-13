@@ -32,11 +32,11 @@ export default function NewsPage() {
       <PageHeader title="News" subtitle={feed.data ? `${feed.data.length} articles · ${unreadCount} unread` : 'Articles audienced to you'} />
       <ErrorBanner error={feed.error} onRetry={feed.refresh} />
       <div className="mb-4 flex flex-wrap items-center gap-2">
-        <button className={`chip ${topic === '' ? '!border-sky/50 !bg-navy-700/70 text-white' : ''}`} onClick={() => setTopic('')}>
+        <button className={`chip ${topic === '' ? '!border-sky/50 !bg-navy-700/70 text-ink' : ''}`} onClick={() => setTopic('')}>
           All topics
         </button>
         {(topics.data ?? []).map((t) => (
-          <button key={t.slug} className={`chip ${topic === t.slug ? '!border-sky/50 !bg-navy-700/70 text-white' : ''}`} onClick={() => setTopic(t.slug)}>
+          <button key={t.slug} className={`chip ${topic === t.slug ? '!border-sky/50 !bg-navy-700/70 text-ink' : ''}`} onClick={() => setTopic(t.slug)}>
             {t.name}
           </button>
         ))}
@@ -50,14 +50,14 @@ export default function NewsPage() {
       </div>
 
       {feed.loading ? (
-        <div className="grid gap-3 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <Skeleton className="h-40" />
           <Skeleton className="h-40" />
         </div>
       ) : items.length === 0 ? (
         <EmptyState title="No articles match" />
       ) : (
-        <ul className="grid gap-3 sm:grid-cols-2">
+        <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           {items.map((n) => {
             const img = api.proxied(newsImage(n));
             return (
@@ -72,11 +72,11 @@ export default function NewsPage() {
                       </span>
                     ))}
                   </div>
-                  <Link to={`/news/${n.id}`} className="text-base font-semibold text-white after:absolute after:inset-0 group-hover:text-sky">
+                  <Link to={`/news/${n.id}`} className="text-base font-semibold text-ink after:absolute after:inset-0 group-hover:text-sky">
                     {n.title}
                   </Link>
-                  <p className="mt-1 line-clamp-3 text-sm text-slate-300">{stripHtml(n.blurb)}</p>
-                  <div className="mt-auto flex items-center gap-3 pt-3 text-xs text-slate-500">
+                  <p className="mt-1 line-clamp-3 text-sm text-ink/80">{stripHtml(n.blurb)}</p>
+                  <div className="mt-auto flex items-center gap-3 pt-3 text-xs text-ink-muted/80">
                     <span className="font-mono">{format(new Date(n.publishAt), 'EEE d MMM, h:mma').toLowerCase()}</span>
                     {!!n.metadata?.commentCount && (
                       <span className="inline-flex items-center gap-1">
@@ -88,7 +88,7 @@ export default function NewsPage() {
                         <Paperclip className="h-3.5 w-3.5" /> {n.attachments}
                       </span>
                     )}
-                    <button className="relative z-10 ml-auto rounded-lg p-1.5 text-slate-400 hover:bg-white/10 hover:text-gold" onClick={() => toggleSave(n.id)} aria-label={savedSet.has(n.id) ? 'Remove from saved' : 'Save for later'}>
+                    <button className="relative z-10 ml-auto rounded-lg p-1.5 text-ink-muted hover:bg-white/10 hover:text-gold" onClick={() => toggleSave(n.id)} aria-label={savedSet.has(n.id) ? 'Remove from saved' : 'Save for later'}>
                       {savedSet.has(n.id) ? <BookmarkCheck className="h-4 w-4 text-gold" /> : <Bookmark className="h-4 w-4" />}
                     </button>
                   </div>

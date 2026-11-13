@@ -4,6 +4,8 @@ import { Shell } from './components/Shell';
 import { FullPageSpinner } from './components/ui';
 import CalendarPage from './pages/CalendarPage';
 import ClassesPage from './pages/ClassesPage';
+import ClassPage from './pages/ClassPage';
+import ClassicPage from './pages/ClassicPage';
 import DashboardPage from './pages/DashboardPage';
 import DueWorkPage from './pages/DueWorkPage';
 import FeedbackPage from './pages/FeedbackPage';
@@ -42,6 +44,8 @@ export default function App() {
         <Route path="news/:id" element={<NewsArticlePage />} />
         <Route path="feedback" element={<FeedbackPage />} />
         <Route path="classes" element={<ClassesPage />} />
+        <Route path="classes/:id" element={<ClassPage />} />
+        <Route path="classic/*" element={<ClassicPage />} />
         <Route path="search" element={<SearchPage />} />
         <Route path="profile" element={<ProfilePage />} />
         <Route path="*" element={<NotFoundPage />} />

@@ -99,23 +99,23 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/60 p-4 pt-[12vh] backdrop-blur-sm" onClick={onClose} role="dialog" aria-modal="true" aria-label="Search">
       <div className="card w-full max-w-xl overflow-hidden" onClick={(e) => e.stopPropagation()} onKeyDown={onKey}>
-        <div className="flex items-center gap-3 border-b border-white/5 px-4 py-3">
+        <div className="flex items-center gap-3 border-b border-line/10 px-4 py-3">
           <Search className="h-4 w-4 text-sky" />
           <input
             ref={inputRef}
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Search pages, news, classes, files, people…"
-            className="w-full bg-transparent text-sm text-white placeholder:text-slate-500 focus:outline-none"
+            className="w-full bg-transparent text-sm text-ink placeholder:text-ink-muted/80 focus:outline-none"
             aria-label="Search"
           />
-          {busy && <span className="text-xs text-slate-500">Searching…</span>}
+          {busy && <span className="text-xs text-ink-muted/80">Searching…</span>}
         </div>
         <ul className="max-h-[50vh] overflow-y-auto p-2" role="listbox">
           {items.map((it, i) => (
             <li key={it.key} role="option" aria-selected={i === active}>
               <button
-                className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm ${i === active ? 'bg-navy-700/70 text-white' : 'text-slate-300 hover:bg-white/5'}`}
+                className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm ${i === active ? 'bg-navy-700/70 text-ink' : 'text-ink/80 hover:bg-white/5'}`}
                 onMouseEnter={() => setActive(i)}
                 onClick={() => {
                   it.run();
@@ -124,12 +124,12 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
               >
                 <it.Icon className="h-4 w-4 shrink-0 text-sky/80" />
                 <span className="flex-1 truncate">{it.label}</span>
-                <span className="truncate text-xs text-slate-500">{it.meta}</span>
-                {i === active && <CornerDownLeft className="h-3.5 w-3.5 text-slate-500" />}
+                <span className="truncate text-xs text-ink-muted/80">{it.meta}</span>
+                {i === active && <CornerDownLeft className="h-3.5 w-3.5 text-ink-muted/80" />}
               </button>
             </li>
           ))}
-          {items.length === 0 && <li className="px-3 py-6 text-center text-sm text-slate-500">No matches</li>}
+          {items.length === 0 && <li className="px-3 py-6 text-center text-sm text-ink-muted/80">No matches</li>}
         </ul>
       </div>
     </div>

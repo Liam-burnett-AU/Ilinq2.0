@@ -40,7 +40,7 @@ export default function CalendarPage() {
             <button className="btn-ghost !px-2" onClick={() => setMonth((m) => addMonths(m, -1))} aria-label="Previous month">
               <ChevronLeft className="h-4 w-4" />
             </button>
-            <span className="min-w-[9rem] text-center text-sm font-medium text-white">{format(month, 'MMMM yyyy')}</span>
+            <span className="min-w-[9rem] text-center text-sm font-medium text-ink">{format(month, 'MMMM yyyy')}</span>
             <button className="btn-ghost !px-2" onClick={() => setMonth((m) => addMonths(m, 1))} aria-label="Next month">
               <ChevronRight className="h-4 w-4" />
             </button>
@@ -50,14 +50,14 @@ export default function CalendarPage() {
       <ErrorBanner error={cal.error} onRetry={cal.refresh} />
       <div className="mb-3 flex flex-wrap gap-2">
         {KINDS.map((k) => (
-          <button key={k} onClick={() => toggle(k)} className={`chip ${kinds.has(k) ? '!border-sky/50 !bg-navy-700/70 text-white' : 'opacity-60'}`} aria-pressed={kinds.has(k)}>
+          <button key={k} onClick={() => toggle(k)} className={`chip ${kinds.has(k) ? '!border-sky/50 !bg-navy-700/70 text-ink' : 'opacity-60'}`} aria-pressed={kinds.has(k)}>
             {KIND_LABEL[k]}
           </button>
         ))}
       </div>
-      <div className="grid gap-5 lg:grid-cols-[1fr_340px]">
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_340px]">
         <div className="card overflow-hidden">
-          <div className="grid grid-cols-7 border-b border-white/5 text-center text-[11px] uppercase tracking-wider text-slate-400">
+          <div className="grid grid-cols-7 border-b border-line/10 text-center text-[11px] uppercase tracking-wider text-ink-muted">
             {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((d) => (
               <div key={d} className="py-2">
                 {d}
@@ -72,18 +72,18 @@ export default function CalendarPage() {
                 <button
                   key={d.toISOString()}
                   onClick={() => setSelected(d)}
-                  className={`min-h-[72px] border-b border-r border-white/5 p-1.5 text-left align-top transition hover:bg-white/5 sm:min-h-[96px] ${!isSameMonth(d, month) ? 'opacity-40' : ''} ${sel ? 'bg-navy-700/40' : ''}`}
+                  className={`min-h-[72px] border-b border-r border-line/10 p-1.5 text-left align-top transition hover:bg-white/5 sm:min-h-[96px] ${!isSameMonth(d, month) ? 'opacity-40' : ''} ${sel ? 'bg-navy-700/40' : ''}`}
                   aria-label={format(d, 'EEEE d MMMM')}
                   aria-pressed={sel}
                 >
-                  <span className={`inline-flex h-6 w-6 items-center justify-center rounded-full text-xs ${isToday(d) ? 'bg-gold font-semibold text-navy-950' : 'text-slate-300'}`}>{format(d, 'd')}</span>
+                  <span className={`inline-flex h-6 w-6 items-center justify-center rounded-full text-xs ${isToday(d) ? 'bg-gold font-semibold text-navy-950' : 'text-ink/80'}`}>{format(d, 'd')}</span>
                   <div className="mt-1 hidden space-y-0.5 sm:block">
                     {items.slice(0, 3).map((e) => (
-                      <div key={e.id} className="truncate rounded px-1 text-[11px] text-white" style={{ background: withAlpha(readableAccent(e.colour), 0.4) }}>
+                      <div key={e.id} className="truncate rounded px-1 text-[11px] text-ink" style={{ background: withAlpha(readableAccent(e.colour), 0.4) }}>
                         {e.title}
                       </div>
                     ))}
-                    {items.length > 3 && <div className="px-1 text-[10px] text-slate-400">+{items.length - 3} more</div>}
+                    {items.length > 3 && <div className="px-1 text-[10px] text-ink-muted">+{items.length - 3} more</div>}
                   </div>
                   <div className="mt-1 flex gap-0.5 sm:hidden">
                     {items.slice(0, 4).map((e) => (

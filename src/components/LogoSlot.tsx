@@ -9,7 +9,7 @@ export function LogoSlot({ size = 'md', withText = true }: { size?: 'sm' | 'md' 
   const px = size === 'sm' ? 'h-8 w-8' : size === 'lg' ? 'h-16 w-16' : 'h-10 w-10';
   return (
     <div className="flex items-center gap-3">
-      <div className={`${px} relative shrink-0 overflow-hidden rounded-xl bg-navy-800 ring-1 ring-sky/30`} aria-label={`${config.schoolName} logo`}>
+      <div className={`${px} relative shrink-0 overflow-hidden rounded-card bg-navy-800 ring-1 ring-sky/30`} aria-label={`${config.schoolName} logo`}>
         <img
           src="/sheldon-logo.svg"
           alt=""
@@ -22,7 +22,7 @@ export function LogoSlot({ size = 'md', withText = true }: { size?: 'sm' | 'md' 
       </div>
       {withText && (
         <div className="leading-tight">
-          <div className="text-sm font-semibold text-white">{config.appName}</div>
+          <div className="text-sm font-semibold text-ink">{config.appName}</div>
           <div className="text-[11px] uppercase tracking-[0.18em] text-sky/80">{config.schoolName}</div>
         </div>
       )}

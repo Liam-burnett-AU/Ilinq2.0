@@ -1,6 +1,6 @@
 import type { PortalApi } from '../schoolbox';
 import type { AssessmentList, EvidenceFeedResponse, NewsArticleResponse, NewsFeedItem, NewsTopic, SearchFilter, SearchResultList, SessionInfo, User, UserToken } from '../types';
-import { DEMO_ARTICLES, DEMO_EVIDENCE, DEMO_NEWS, DEMO_PARENT, DEMO_SEARCH, DEMO_STUDENT, DEMO_TOPICS, buildCalendar } from './fixtures';
+import { DEMO_ARTICLES, DEMO_EVIDENCE, DEMO_FOLDER_ITEMS, DEMO_NEWS, DEMO_PARENT, DEMO_SEARCH, DEMO_STUDENT, DEMO_TOPICS, buildCalendar } from './fixtures';
 import { ApiError } from '../client';
 
 const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -58,6 +58,16 @@ export class DemoApi implements PortalApi {
     if (!a) throw new ApiError(404, 'Article not found');
     this.viewed.add(id);
     return { ...a, isSavedForLater: this.saved.has(id) };
+  }
+  async getFolderNews(folderId: number): Promise<NewsFeedItem[]> {
+    await wait(this.latency);
+    return DEMO_NEWS.filter((n) => (folderId % 2 === 0 ? n.id % 2 === 0 : n.id % 2 === 1)).slice(0, 3);
+  }
+  async searchFolder(folderId: number, keyword: string, limit = 50): Promise<SearchResultList> {
+    await wait(this.latency);
+    const k = keyword.trim().toLowerCase();
+    const data = DEMO_FOLDER_ITEMS(folderId).filter((r) => !k || r.title.toLowerCase().includes(k)).slice(0, limit);
+    return { data, metadata: { count: data.length, cursor: { current: null, next: null } } };
   }
   async getSavedNews() {
     return [...this.saved];
