@@ -13,10 +13,10 @@ export const DEMO_STUDENT: User = {
   preferredName: null,
   fullName: 'Sam Reed',
   email: 'sreed@student.sheldoncollege.com',
-  role: { id: 13, name: 'Secondary Student', type: 'student' },
-  campus: [{ id: 1, name: 'Secondary', code: 'SEC', days: 10 }],
-  yearLevel: { id: 11, name: 'Year 10' },
-  schoolHouse: { id: 2, name: 'Fraser' },
+  role: { id: 17, name: 'Year 10 Student', type: 'student' },
+  campus: [{ id: 1, name: 'Senior College', code: '01-59', days: 5 }],
+  yearLevel: { id: 12, name: '10' },
+  schoolHouse: { id: 1, name: 'Integra' },
   flags: { enableTimetable: true, showNotificationsPanel: true, calendarView: 'agendaWeek' },
   guardians: [
     {
@@ -31,15 +31,11 @@ export const DEMO_STUDENT: User = {
     },
   ],
   groups: [
-    { id: 801, name: '10 English A (10ENGA)', membership: 'read', enrolmentStatus: 'enroled', isFavourite: true, _links: { homepage: '/homepage/801' } },
-    { id: 802, name: '10 Mathematics (10MATB)', membership: 'read', enrolmentStatus: 'enroled', _links: { homepage: '/homepage/802' } },
-    { id: 803, name: '10 Science (10SCIC)', membership: 'read', enrolmentStatus: 'enroled', _links: { homepage: '/homepage/803' } },
-    { id: 804, name: '10 Design & Robotics (10DRT)', membership: 'read', enrolmentStatus: 'enroled', isFavourite: true, _links: { homepage: '/homepage/804' } },
-    { id: 805, name: '10 Humanities (10HUM)', membership: 'read', enrolmentStatus: 'enroled', _links: { homepage: '/homepage/805' } },
-    { id: 806, name: '10 Health & PE (10HPE)', membership: 'read', enrolmentStatus: 'enroled', _links: { homepage: '/homepage/806' } },
-    { id: 807, name: 'Digital Solutions (10DIG)', membership: 'read', enrolmentStatus: 'enroled', _links: { homepage: '/homepage/807' } },
-    { id: 901, name: 'FTC Robotics Club', type: 'free', membership: 'write', enrolmentStatus: 'enroled', isFavourite: true, _links: { homepage: '/homepage/901' } },
-    { id: 902, name: 'Fraser House', type: 'private', membership: 'read', enrolmentStatus: 'enroled', isForceFollow: true, _links: { homepage: '/homepage/902' } },
+    { id: 10860, name: 'Integra', type: 'private', isForceFollow: false, isFavourite: true, isNotificationsOn: true, enrolmentStatus: 'enroled', membership: 'read', _links: { homepage: '/homepage/10860' } },
+    { id: 22819, name: 'Year 10 Student Information 2026', type: 'private', isForceFollow: true, isFavourite: true, isNotificationsOn: true, enrolmentStatus: 'enroled', membership: 'read', _links: { homepage: '/homepage/22819' } },
+    { id: 23574, name: 'Advanced Robotics', type: 'private', isForceFollow: false, isFavourite: true, isNotificationsOn: true, enrolmentStatus: 'enroled', membership: 'read', _links: { homepage: '/homepage/23574' } },
+    { id: 25573, name: 'Strength & Conditioning Program', type: 'moderated', isForceFollow: true, isFavourite: true, isNotificationsOn: true, enrolmentStatus: 'enroled', membership: 'read', _links: { homepage: '/homepage/25573' } },
+    { id: 14304, name: 'Junior Learning Centre (JLC)', type: 'free', isForceFollow: false, isFavourite: false, isNotificationsOn: false, enrolmentStatus: 'enroled', membership: 'read', _links: { homepage: '/homepage/14304' } },
   ],
   _links: { profile: '/search/user/4690', avatar: null },
 };
@@ -79,24 +75,25 @@ interface Subject {
   folderId: number;
 }
 
+// Real Schoolbox class codes look like 10-SCI10-B; colours are the pastels Schoolbox assigns.
 const SUBJECTS: Subject[] = [
-  { code: '10ENGA', name: 'English', room: 'B2.04', teacher: 'Ms R White', colour: '#2a5fa3', folderId: 801 },
-  { code: '10MATB', name: 'Mathematics', room: 'C1.12', teacher: 'Mr D Chen', colour: '#0f7c6d', folderId: 802 },
-  { code: '10SCIC', name: 'Science', room: 'Lab 3', teacher: 'Dr A Nair', colour: '#7a3fa3', folderId: 803 },
-  { code: '10DRT', name: 'Design & Robotics', room: 'Innovation Hub', teacher: 'Mr K Osei', colour: '#b3541e', folderId: 804 },
-  { code: '10HUM', name: 'Humanities', room: 'B1.07', teacher: 'Mrs L Byrne', colour: '#8a6d1f', folderId: 805 },
-  { code: '10HPE', name: 'Health & PE', room: 'Sports Centre', teacher: 'Mr T Hale', colour: '#1f7a8c', folderId: 806 },
-  { code: '10DIG', name: 'Digital Solutions', room: 'ICT 2', teacher: 'Ms P Kaur', colour: '#3d5c93', folderId: 807 },
+  { code: '10-ENG10-C', name: 'English', room: 'SA3', teacher: 'Ms R White', colour: '#dfe9ff', folderId: 38233 },
+  { code: '10-PMM10-C', name: 'Pre-Mathematical Methods', room: 'AS5', teacher: 'Mr D Chen', colour: '#f9ffe1', folderId: 38256 },
+  { code: '10-SCI10-B', name: 'Science', room: 'SI7', teacher: 'Dr A Nair', colour: '#e8d9ff', folderId: 38259 },
+  { code: '10-DES10-B', name: 'Design and Technologies', room: 'LA2', teacher: 'Mr K Osei', colour: '#ffe9db', folderId: 38227 },
+  { code: '10-HUM10-A', name: 'Humanities', room: 'SB3', teacher: 'Mrs L Byrne', colour: '#ffdff9', folderId: 38241 },
+  { code: '10-HPE10-A', name: 'Health & Physical Education', room: 'SE1', teacher: 'Mr T Hale', colour: '#fdddea', folderId: 38236 },
+  { code: '10-DIG10-A', name: 'Digital Technologies', room: 'AS1', teacher: 'Ms P Kaur', colour: '#dfffdf', folderId: 38228 },
 ];
 
-// Period times (Mon-Fri). Sheldon's real bell times will differ; this is demo data.
+// Senior College bell times (demo approximation of the real timetable).
 const PERIODS = [
-  { label: 'Homeroom', start: [8, 30], end: [8, 45] },
-  { label: 'P1', start: [8, 45], end: [9, 45] },
-  { label: 'P2', start: [9, 45], end: [10, 45] },
-  { label: 'P3', start: [11, 10], end: [12, 10] },
-  { label: 'P4', start: [12, 10], end: [13, 10] },
-  { label: 'P5', start: [13, 50], end: [14, 50] },
+  { label: 'Home Group', start: [8, 21], end: [8, 30] },
+  { label: 'P1', start: [8, 31], end: [9, 40] },
+  { label: 'P2', start: [9, 41], end: [10, 50] },
+  { label: 'P3', start: [11, 21], end: [12, 30] },
+  { label: 'P4', start: [13, 11], end: [14, 20] },
+  { label: 'P5', start: [14, 21], end: [15, 30] },
 ] as const;
 
 // subject index per weekday per period (P1..P5)
@@ -110,56 +107,7 @@ const GRID: number[][] = [
 
 const iso = (d: Date) => formatISO(d);
 const at = (day: Date, [h, m]: readonly [number, number] | number[]) => set(day, { hours: h, minutes: m, seconds: 0, milliseconds: 0 });
-
-function classEvent(day: Date, p: (typeof PERIODS)[number], s: Subject, eventId: number): CalendarAjaxEvent {
-  const start = at(day, p.start);
-  const end = at(day, p.end);
-  return {
-    title: `${s.name} (${s.code})`,
-    start: iso(start),
-    end: iso(end),
-    editable: false,
-    allDay: false,
-    color: s.colour,
-    className: 'source2 type1 campus1 timetable',
-    data: {
-      meta: {
-        eventId,
-        time: `${fmt(start)}&ndash;${fmt(end)}`,
-        location: s.room,
-        detail: `${p.label} · ${s.teacher}`,
-        eventTypeId: 1,
-        eventType: 'type1',
-        variant: 'class',
-        type: 'Class',
-        author: s.teacher,
-        level: 'source2 type1 campus1',
-      },
-      links: { category: { id: -1, name: '' }, path: `/homepage/${s.folderId}` },
-      classAttendance: { url: `/attendance/class/${s.folderId}`, target: '_self' },
-    },
-  };
-}
-
-function homeroom(day: Date, eventId: number): CalendarAjaxEvent {
-  const p = PERIODS[0];
-  const start = at(day, p.start);
-  const end = at(day, p.end);
-  return {
-    title: 'Homeroom (10FRA)',
-    start: iso(start),
-    end: iso(end),
-    editable: false,
-    allDay: false,
-    color: '#575756',
-    className: 'source2 type1 campus1 timetable',
-    data: {
-      meta: { eventId, time: `${fmt(start)}&ndash;${fmt(end)}`, location: 'B2.01', type: 'Class', variant: 'class', detail: 'Mrs L Byrne' },
-      links: { path: '/homepage/902' },
-      classAttendance: { url: '/attendance/class/902', target: '_self' },
-    },
-  };
-}
+const dateOnly = (d: Date) => formatISO(d, { representation: 'date' });
 
 function fmt(d: Date) {
   const h = d.getHours();
@@ -168,79 +116,170 @@ function fmt(d: Date) {
   return `${((h + 11) % 12) + 1}:${m}${ap}`;
 }
 
-function dueWork(day: Date, title: string, s: Subject, id: number, completed = false, hour = 15): CalendarAjaxEvent {
-  const d = at(day, [hour, 0]);
+/** Timetable class event, exactly as Schoolbox 26.1 returns it (padded title, timetable.code, classAttendance). */
+function classEvent(day: Date, p: (typeof PERIODS)[number], s: Subject, eventId: string): CalendarAjaxEvent {
+  const start = at(day, p.start);
+  const end = at(day, p.end);
   return {
-    title,
-    start: iso(d),
-    end: iso(d),
+    resourceId: null,
+    title: `${s.name.padEnd(30)} (${s.code}), ${s.room}`,
+    start: iso(start),
+    end: iso(end),
     editable: false,
     allDay: false,
-    color: '#fbd708',
-    className: 'source3 type7 campus1 dueWork',
+    color: s.colour,
+    className: `source7 type1 group${s.folderId}`,
     data: {
       meta: {
-        eventId: id,
-        time: fmt(d),
-        detail: `${s.name} · ${s.teacher}`,
-        type: 'Due Work',
-        variant: 'dueWork',
-        completed,
-        location: s.code,
+        eventId,
+        time: `${fmt(start)}&ndash;${fmt(end)}`,
+        detail: '',
+        location: s.room,
+        eventTypeId: 1,
+        eventType: 'type1',
+        variant: 'event',
+        type: '',
+        author: s.teacher,
+        authorId: 10135,
+        level: `source7 type1 group${s.folderId}`,
+        completed: false,
       },
-      links: { path: `/learning/assessments/${id}` },
+      links: { category: { id: -1, name: '' } },
+      styles: { visible: '' },
+      timetable: { code: s.code },
+      classAttendance: { url: null, target: null },
     },
   };
 }
 
-function schoolEvent(start: Date, end: Date, title: string, id: number, extra: Partial<NonNullable<CalendarAjaxEvent['data']['meta']>> = {}, allDay = false): CalendarAjaxEvent {
+function homeroom(day: Date, eventId: string): CalendarAjaxEvent {
+  const p = PERIODS[0];
+  const start = at(day, p.start);
+  const end = at(day, p.end);
   return {
-    title,
-    start: allDay ? formatISO(start, { representation: 'date' }) : iso(start),
-    end: allDay ? formatISO(addDays(end, 1), { representation: 'date' }) : iso(end),
+    resourceId: null,
+    title: `${'Home Group'.padEnd(30)} (10-HMG10-A), LD4`,
+    start: iso(start),
+    end: iso(end),
     editable: false,
-    allDay,
-    color: '#a3c1e7',
-    className: 'source1 type3 campus1',
+    allDay: false,
+    color: '#ffe9db',
+    className: 'source7 type1 campus1',
     data: {
-      meta: { eventId: id, type: 'School Event', variant: 'event', author: 'Sheldon College', ...extra },
-      links: { path: `/calendar/event/${id}` },
-      attendance: { hasAttendance: false },
+      meta: { eventId, time: `${fmt(start)}&ndash;${fmt(end)}`, detail: '', location: 'LD4', eventTypeId: 1, eventType: 'type1', variant: 'event', type: '', author: 'Mr S Trafford', authorId: 1, level: 'source7 type1 campus1', completed: false },
+      links: { category: { id: -1, name: '' } },
+      styles: { visible: '' },
+      timetable: { code: '10-HMG10-A' },
+      classAttendance: { url: null, target: null },
     },
   };
+}
+
+/** Due work event as Schoolbox returns it: all-day date, empty end, links as an array, custom.moreDetailsLink. */
+function dueWork(day: Date, title: string, s: Subject, id: number, completed = false, workType = 'Assessment Task', timed?: [number, number]): CalendarAjaxEvent {
+  const start = timed ? iso(at(day, timed)) : dateOnly(day);
+  return {
+    title: `${s.name} (${s.code})\n${title}`,
+    start,
+    end: '',
+    editable: false,
+    allDay: !timed,
+    color: completed ? 'rgba(255, 255, 255, 1.000)' : 'rgba(215, 100, 100, 1.000)',
+    className: 'source2 type4 personal',
+    resourceId: id,
+    data: {
+      meta: {
+        eventId: id,
+        time: '',
+        title,
+        detail: '',
+        location: '',
+        eventType: 'type4',
+        variant: 'event',
+        type: 'Due Work',
+        author: '',
+        authorId: -1,
+        level: 'source2 type4 personal',
+        completed,
+        folderName: `${s.name} (${s.code})`,
+        folderId: s.folderId,
+        workType,
+        workTypeId: workType === 'Class Work' ? 7 : 1,
+        weighted: 0,
+        assessmentType: 'dueWork',
+        colour: 'rgba(215, 100, 100, 1.000)',
+        editable: false,
+      },
+      links: [],
+      styles: { visible: true },
+      attendance: { hasAttendance: false },
+      custom: { modifyLink: false, moreDetailsLink: `/learning/assessments/${id}/4690` },
+    },
+  };
+}
+
+function schoolEvent(start: Date, end: Date, title: string, id: number, type: string, extra: Partial<NonNullable<CalendarAjaxEvent['data']['meta']>> = {}, allDay = false, colour = '#a3bddb'): CalendarAjaxEvent {
+  return {
+    resourceId: null,
+    title,
+    start: allDay ? dateOnly(start) : iso(start),
+    end: allDay ? dateOnly(addDays(end, 1)) : iso(end),
+    editable: false,
+    allDay,
+    color: colour,
+    className: 'source1 type1 group10794 group22819',
+    data: {
+      meta: { editable: false, eventId: id, time: '', detail: '', location: '', eventTypeId: 1, eventType: 'type1', variant: 'event', type, author: 'Sheldon College', authorId: 1484, level: 'source1 type1 group10794', completed: false, seriesId: null, ...extra },
+      links: { category: { id: -1, name: '' }, path: '' },
+      styles: { visible: '' },
+      attendance: { hasAttendance: false, status: { current: null } },
+    },
+  };
+}
+
+/** "WEEK 6 - TERM 4" banner rows that Schoolbox puts in the calendar. */
+function termWeek(monday: Date, week: number, term: number, id: number): CalendarAjaxEvent {
+  return schoolEvent(monday, addDays(monday, 4), `WEEK ${week} - TERM ${term}`, id, 'Term Weeks', {}, true, '#eaffec');
 }
 
 /** Build a calendar feed for [start, end). */
 export function buildCalendar(start: Date, end: Date): CalendarAjaxEvent[] {
   const out: CalendarAjaxEvent[] = [];
-  let id = 1000;
+  let n = 0;
   for (let d = new Date(start); d < end; d = addDays(d, 1)) {
     const dow = d.getDay(); // 0 Sun
     if (dow >= 1 && dow <= 5) {
-      out.push(homeroom(d, id++));
-      GRID[dow - 1].forEach((subjectIdx, i) => out.push(classEvent(d, PERIODS[i + 1], SUBJECTS[subjectIdx], id++)));
+      out.push(homeroom(d, `hmg-${dateOnly(d)}`));
+      GRID[dow - 1].forEach((subjectIdx, i) => out.push(classEvent(d, PERIODS[i + 1], SUBJECTS[subjectIdx], `cls-${dateOnly(d)}-${n++}`)));
     }
   }
   const today = new Date();
   const monday = startOfWeek(today, { weekStartsOn: 1 });
   const dues: CalendarAjaxEvent[] = [
-    dueWork(addDays(today, -3), 'Persuasive speech draft', SUBJECTS[0], 5001, true),
-    dueWork(addDays(today, -1), 'Chapter 7 problem set', SUBJECTS[1], 5002),
-    dueWork(today, 'Robot drivetrain CAD submission', SUBJECTS[3], 5003, false, 23),
-    dueWork(addDays(today, 2), 'Prac report: titration', SUBJECTS[2], 5004),
-    dueWork(addDays(today, 4), 'Source analysis: Federation', SUBJECTS[4], 5005),
-    dueWork(addDays(today, 9), 'Python project milestone 2', SUBJECTS[6], 5006),
-    dueWork(addDays(today, 16), 'Fitness journal reflection', SUBJECTS[5], 5007),
+    dueWork(addDays(today, -3), 'Persuasive speech draft', SUBJECTS[0], 5001, true, 'Class Work'),
+    dueWork(addDays(today, -1), 'Chapter 7 problem set', SUBJECTS[1], 5002, false, 'Class Work'),
+    dueWork(today, 'Instrument 3.1 - Website Development (AI Agent)', SUBJECTS[6], 5003, false, 'Assessment Task', [15, 30]),
+    dueWork(today, 'RQ & Method', SUBJECTS[2], 5004, false, 'Class Work'),
+    dueWork(addDays(today, 2), 'Prac report: titration', SUBJECTS[2], 5005),
+    dueWork(addDays(today, 4), 'Source analysis: Federation', SUBJECTS[4], 5006),
+    dueWork(addDays(today, 9), 'Instrument 4.1 - Game On! Movement for Life', SUBJECTS[5], 5007),
+    dueWork(addDays(today, 16), '4.1 Semester Examination', SUBJECTS[1], 5008),
   ];
   const events: CalendarAjaxEvent[] = [
-    schoolEvent(at(addDays(monday, 1), [15, 15]), at(addDays(monday, 1), [17, 0]), 'FTC Robotics Club', 7001, { location: 'Innovation Hub', type: 'Co-curricular' }),
-    schoolEvent(at(addDays(monday, 3), [15, 15]), at(addDays(monday, 3), [17, 0]), 'FTC Robotics Club', 7002, { location: 'Innovation Hub', type: 'Co-curricular' }),
-    schoolEvent(addDays(monday, 4), addDays(monday, 4), 'Free Dress Day: Fraser House fundraiser', 7003, { type: 'School Event' }, true),
-    schoolEvent(at(addDays(monday, 8), [18, 0]), at(addDays(monday, 8), [20, 0]), 'Year 10 Subject Selection Evening', 7004, { location: 'Performing Arts Centre', type: 'Parent Event' }),
-    schoolEvent(addDays(monday, 11), addDays(monday, 12), 'FTC Queensland Scrimmage', 7005, { location: 'Off campus', type: 'Co-curricular' }, true),
-    schoolEvent(at(addDays(monday, 14), [8, 30]), at(addDays(monday, 14), [15, 0]), 'Year 10 Exam Block begins', 7006, { type: 'Academic' }),
+    termWeek(addDays(monday, -7), 5, 4, 9001),
+    termWeek(monday, 6, 4, 9002),
+    termWeek(addDays(monday, 7), 7, 4, 9003),
+    termWeek(addDays(monday, 14), 8, 4, 9004),
+    schoolEvent(at(monday, [8, 30]), at(monday, [9, 40]), 'Assembly - World Teachers Week (Prep to Year 12)', 7001, 'College Event', { location: 'Stadium' }),
+    schoolEvent(at(addDays(monday, 1), [15, 30]), at(addDays(monday, 1), [17, 0]), 'Advanced Robotics (FTC build)', 7002, 'Technology', { location: 'Innovation Hub' }, false, '#e0e1ff'),
+    schoolEvent(at(addDays(monday, 3), [15, 30]), at(addDays(monday, 3), [17, 0]), 'Advanced Robotics (FTC build)', 7003, 'Technology', { location: 'Innovation Hub' }, false, '#e0e1ff'),
+    schoolEvent(addDays(monday, 4), addDays(monday, 4), 'Free Dress Day: Integra House fundraiser', 7004, 'College Event', {}, true),
+    schoolEvent(at(addDays(monday, 4), [8, 30]), at(addDays(monday, 4), [9, 40]), 'NO ASSEMBLY (MONDAY PERIOD 4)', 7005, 'Reminders', {}, false, '#d4d1d1'),
+    schoolEvent(at(addDays(monday, 8), [18, 0]), at(addDays(monday, 8), [20, 0]), 'Year 10 Subject Selection Evening', 7006, 'College Event', { location: 'Performing Arts Centre' }),
+    schoolEvent(addDays(monday, 12), addDays(monday, 12), 'FTC Brisbane South Qualifier (Robotics)', 7007, 'Technology', { location: "St Peter's Lutheran College, Indooroopilly" }, true, '#e0e1ff'),
+    schoolEvent(at(addDays(monday, 14), [8, 30]), at(addDays(monday, 14), [15, 0]), 'Year 10 Exam Block begins', 7008, 'Assessment/Exam', {}),
   ];
-  const inRange = (e: CalendarAjaxEvent) => new Date(e.start) < end && new Date(e.end) >= start;
+  const inRange = (e: CalendarAjaxEvent) => new Date(e.start) < end && new Date(e.end || e.start) >= start;
   return [...out, ...dues.filter(inRange), ...events.filter(inRange)];
 }
 
@@ -268,7 +307,7 @@ export const DEMO_NEWS: NewsFeedItem[] = [
     metadata: { commentCount: 4 },
     attachments: 1,
     viewedAt: null,
-    _links: { self: '/news/3101' },
+    _links: { self: { href: '/news/3101', auth: null } }, author: { fullname: 'Mrs L Green' },
   },
   {
     id: 3102,
@@ -300,7 +339,7 @@ export const DEMO_NEWS: NewsFeedItem[] = [
   },
   {
     id: 3104,
-    title: 'Fraser House free dress day this Friday',
+    title: 'Integra House free dress day this Friday',
     blurb: '<p>Gold coin donation supporting the Redlands Foodbank. Wear your house colours!</p>',
     featureImage: null,
     publishAt: daysAgo(3, 9),
@@ -356,10 +395,12 @@ export const DEMO_EVIDENCE: EvidenceFeedItem[] = [
     date: daysAgo(1, 14),
     object: {
       id: 1,
-      assessment: { id: 5001, title: 'Persuasive speech draft', folder: { name: '10 English A' } },
       mark: 'A-',
-      comment: 'Strong structure and a confident voice. Tighten the evidence in paragraph two and this is an A.',
-      creator: { firstName: 'Rebecca', lastName: 'White' },
+      normalisedMark: 88,
+      comment: '<p>Strong structure and a confident voice. Tighten the evidence in paragraph two and this is an A.</p>',
+      instructor: { firstName: 'Rebecca', lastName: 'White', fullName: 'Ms Rebecca White' },
+      assessment: { id: 5001, title: 'Persuasive speech draft', folderName: 'English', folderId: 38233, workType: 'Class Work', dueAt: daysAgo(3, 23) },
+      _links: { summary: '/learning/assessments/5001/4690' },
     },
   },
   {
@@ -382,10 +423,12 @@ export const DEMO_EVIDENCE: EvidenceFeedItem[] = [
     date: daysAgo(9, 16),
     object: {
       id: 4,
-      assessment: { id: 4990, title: 'Algebra test', folder: { name: '10 Mathematics' } },
-      mark: '78%',
-      comment: 'Good working shown throughout. Revise factorising quadratics with non-unit coefficients.',
-      creator: { firstName: 'David', lastName: 'Chen' },
+      mark: '',
+      normalisedMark: 78,
+      comment: '<p>Good working shown throughout. Revise factorising quadratics with non-unit coefficients.</p>',
+      instructor: { firstName: 'David', lastName: 'Chen', fullName: 'Mr David Chen' },
+      assessment: { id: 4990, title: 'Algebra test', folderName: 'Pre-Mathematical Methods', folderId: 38256, workType: 'Assessment Task' },
+      _links: { summary: '/learning/assessments/4990/4690' },
     },
   },
 ];

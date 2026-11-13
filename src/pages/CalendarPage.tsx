@@ -2,7 +2,7 @@ import { addDays, addMonths, endOfMonth, endOfWeek, format, isSameDay, isSameMon
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import type { EventKind } from '@/api/adapters';
-import { onDay } from '@/api/adapters';
+import { onDay, readableAccent, withAlpha } from '@/api/adapters';
 import { EventRow, KIND_LABEL } from '@/components/EventCard';
 import { Card, EmptyState, ErrorBanner, PageHeader } from '@/components/ui';
 import { useCalendarRange } from '@/hooks/useCalendar';
@@ -79,7 +79,7 @@ export default function CalendarPage() {
                   <span className={`inline-flex h-6 w-6 items-center justify-center rounded-full text-xs ${isToday(d) ? 'bg-gold font-semibold text-navy-950' : 'text-slate-300'}`}>{format(d, 'd')}</span>
                   <div className="mt-1 hidden space-y-0.5 sm:block">
                     {items.slice(0, 3).map((e) => (
-                      <div key={e.id} className="truncate rounded px-1 text-[11px] text-white" style={{ background: e.colour + '55' }}>
+                      <div key={e.id} className="truncate rounded px-1 text-[11px] text-white" style={{ background: withAlpha(readableAccent(e.colour), 0.4) }}>
                         {e.title}
                       </div>
                     ))}
@@ -87,7 +87,7 @@ export default function CalendarPage() {
                   </div>
                   <div className="mt-1 flex gap-0.5 sm:hidden">
                     {items.slice(0, 4).map((e) => (
-                      <span key={e.id} className="h-1.5 w-1.5 rounded-full" style={{ background: e.colour }} />
+                      <span key={e.id} className="h-1.5 w-1.5 rounded-full" style={{ background: readableAccent(e.colour) }} />
                     ))}
                   </div>
                 </button>

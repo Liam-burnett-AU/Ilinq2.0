@@ -59,7 +59,7 @@ export default function NewsPage() {
       ) : (
         <ul className="grid gap-3 sm:grid-cols-2">
           {items.map((n) => {
-            const img = api.absolute(newsImage(n));
+            const img = api.proxied(newsImage(n));
             return (
               <li key={n.id} className="card group relative flex flex-col overflow-hidden animate-fade-up">
                 {img && <img src={img} alt="" className="h-36 w-full object-cover" loading="lazy" />}

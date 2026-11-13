@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 import { ArrowLeft, Bookmark, BookmarkCheck, ExternalLink, Paperclip } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { newsImage } from '@/api/adapters';
+import { hrefOf, newsImage } from '@/api/adapters';
 import { useAuth } from '@/auth/AuthContext';
 import { ErrorBanner, Skeleton } from '@/components/ui';
 import { invalidate, useAsync } from '@/hooks/useAsync';
@@ -22,7 +22,7 @@ export default function NewsArticlePage() {
 
   const a = q.data?.article;
   const body = useMemo(() => sanitiseHtml(a?.body ?? a?.blurb ?? '', (p) => api.absolute(p) ?? p), [a, api]);
-  const img = api.absolute(a ? newsImage(a) : undefined);
+  const img = api.proxied(a ? newsImage(a) : undefined);
 
   const toggleSave = async () => {
     if (!a) return;
@@ -70,7 +70,7 @@ export default function NewsArticlePage() {
               <ul className="space-y-1">
                 {a.attachedFiles.map((f, i) => (
                   <li key={i}>
-                    <a className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm text-white hover:bg-white/5" href={api.absolute(f._links?.download || f._links?.image || f._links?.stream) ?? '#'} target="_blank" rel="noreferrer">
+                    <a className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm text-white hover:bg-white/5" href={api.proxied(hrefOf(f._links?.download) || hrefOf(f._links?.fetch) || hrefOf(f._links?.image) || hrefOf(f._links?.stream)) ?? '#'} target="_blank" rel="noreferrer">
                       <Paperclip className="h-4 w-4 text-sky" />
                       <span className="flex-1 truncate">{f.name}</span>
                       {f.size && <span className="font-mono text-xs text-slate-500">{(f.size / 1024).toFixed(0)} KB</span>}
@@ -81,7 +81,7 @@ export default function NewsArticlePage() {
             </section>
           )}
           <p className="mt-4 text-xs text-slate-500">
-            <a className="inline-flex items-center gap-1 hover:text-white" href={api.absolute(a._links?.self || `/news/${a.id}`)} target="_blank" rel="noreferrer">
+            <a className="inline-flex items-center gap-1 hover:text-white" href={api.absolute(hrefOf(a._links?.self) || `/news/${a.id}`)} target="_blank" rel="noreferrer">
               Open in classic iLINQ to comment <ExternalLink className="h-3 w-3" />
             </a>
           </p>

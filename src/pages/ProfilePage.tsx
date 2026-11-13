@@ -25,7 +25,7 @@ export default function ProfilePage() {
   const [err, setErr] = useState<string | null>(null);
 
   if (!user) return null;
-  const avatar = api.absolute(user._links?.avatar);
+  const avatar = api.proxied(user._links?.avatar);
 
   const makeToken = async () => {
     setBusy(true);

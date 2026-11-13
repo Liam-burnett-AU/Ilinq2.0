@@ -1,24 +1,33 @@
 import { format } from 'date-fns';
 import { CheckCircle2, Circle, ExternalLink, MapPin } from 'lucide-react';
 import type { PortalEvent } from '@/api/adapters';
+import { readableAccent, stripHtml } from '@/api/adapters';
 import { useAuth } from '@/auth/AuthContext';
 
-export const KIND_LABEL: Record<PortalEvent['kind'], string> = { class: 'Class', dueWork: 'Due work', event: 'Event', booking: 'Booking' };
+export const KIND_LABEL: Record<PortalEvent['kind'], string> = { class: 'Class', dueWork: 'Due work', event: 'Event', booking: 'Booking', termWeek: 'Term week' };
 
 export function timeRange(e: PortalEvent) {
-  if (e.allDay) return 'All day';
+  if (e.allDay) return e.kind === 'dueWork' ? 'End of day' : 'All day';
   const s = format(e.start, 'h:mma').toLowerCase();
   const en = format(e.end, 'h:mma').toLowerCase();
   return s === en ? s : `${s} – ${en}`;
+}
+
+/** Secondary line for an event: class code/teacher, due-work folder/work type, or event type. */
+export function subline(e: PortalEvent): string | undefined {
+  if (e.kind === 'class') return [e.code, e.author].filter(Boolean).join(' · ') || undefined;
+  if (e.kind === 'dueWork') return [e.folderName, e.workType].filter(Boolean).join(' · ') || undefined;
+  return [e.typeLabel, e.detail ? stripHtml(e.detail) : undefined].filter(Boolean).join(' · ') || undefined;
 }
 
 export function EventRow({ event, showDate = false, emphasis = false }: { event: PortalEvent; showDate?: boolean; emphasis?: boolean }) {
   const { api } = useAuth();
   const href = api.absolute(event.path);
   const isDue = event.kind === 'dueWork';
+  const sub = subline(event);
   return (
     <div className={`group flex items-stretch gap-3 rounded-xl border px-3 py-2.5 transition ${emphasis ? 'border-gold/40 bg-gold/5' : 'border-white/5 bg-white/[0.02] hover:bg-white/[0.05]'}`}>
-      <div className="w-1 shrink-0 rounded-full" style={{ background: event.colour }} aria-hidden />
+      <div className="w-1 shrink-0 rounded-full" style={{ background: readableAccent(event.colour) }} aria-hidden />
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
           {isDue && (event.completed ? <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-400" /> : <Circle className="h-4 w-4 shrink-0 text-slate-500" />)}
@@ -31,8 +40,7 @@ export function EventRow({ event, showDate = false, emphasis = false }: { event:
               <MapPin className="h-3 w-3" /> {event.location}
             </span>
           )}
-          {event.detail && event.kind !== 'class' && <span className="truncate">{stripTags(event.detail)}</span>}
-          {event.kind === 'class' && event.detail && <span className="truncate">{stripTags(event.detail)}</span>}
+          {sub && <span className="truncate">{sub}</span>}
         </p>
       </div>
       {href && (
@@ -42,8 +50,4 @@ export function EventRow({ event, showDate = false, emphasis = false }: { event:
       )}
     </div>
   );
-}
-
-function stripTags(s: string) {
-  return s.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
 }

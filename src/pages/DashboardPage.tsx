@@ -2,9 +2,9 @@ import { addDays, format, startOfDay } from 'date-fns';
 import { ArrowRight, Clock, ExternalLink } from 'lucide-react';
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { bucketDueWork, classesOn, isUnread, nowAndNext, onDay, stripHtml } from '@/api/adapters';
+import { bucketDueWork, classesOn, isUnread, nowAndNext, onDay, readableAccent, stripHtml, termWeekFor } from '@/api/adapters';
 import { useAuth } from '@/auth/AuthContext';
-import { EventRow, timeRange } from '@/components/EventCard';
+import { EventRow, subline, timeRange } from '@/components/EventCard';
 import { Card, EmptyState, ErrorBanner, Skeleton } from '@/components/ui';
 import { useAsync } from '@/hooks/useAsync';
 import { useCalendarRange } from '@/hooks/useCalendar';
@@ -27,6 +27,7 @@ export default function DashboardPage() {
   const greeting = now.getHours() < 12 ? 'Good morning' : now.getHours() < 17 ? 'Good afternoon' : 'Good evening';
   const name = user?.preferredName || user?.firstName;
   const viewingChild = user?.role.type === 'parent' && viewAs;
+  const termWeek = termWeekFor(cal.events, today);
 
   return (
     <div className="space-y-5">
@@ -37,6 +38,7 @@ export default function DashboardPage() {
           </h1>
           <p className="mt-1 text-sm text-slate-400">
             {format(now, 'EEEE d MMMM')}
+            {termWeek ? ` · ${termWeek}` : ''}
             {viewingChild ? ` · viewing ${viewAs.givenName || viewAs.firstname}'s day` : ''}
             {classes.length ? ` · ${classes.length} classes today` : ' · no classes today'}
           </p>
@@ -86,10 +88,10 @@ export default function DashboardPage() {
                 return (
                   <li key={c.id} className={`flex items-center gap-3 rounded-xl px-2.5 py-2 ${live ? 'bg-navy-700/60 ring-1 ring-sky/40' : past ? 'opacity-50' : ''}`}>
                     <span className="w-16 shrink-0 font-mono text-[11px] text-slate-400">{format(c.start, 'h:mm')}–{format(c.end, 'h:mm')}</span>
-                    <span className="h-7 w-1 rounded-full" style={{ background: c.colour }} />
+                    <span className="h-7 w-1 rounded-full" style={{ background: readableAccent(c.colour) }} />
                     <span className="min-w-0 flex-1">
                       <span className="block truncate text-sm font-medium text-white">{c.title}</span>
-                      <span className="block truncate text-xs text-slate-400">{c.location}{c.detail ? ` · ${stripHtml(c.detail)}` : ''}</span>
+                      <span className="block truncate text-xs text-slate-400">{[c.location, subline(c)].filter(Boolean).join(' · ')}</span>
                     </span>
                   </li>
                 );
@@ -160,7 +162,7 @@ export default function DashboardPage() {
 function NowCard({ label, event, minutes, mode, loading }: { label: string; event: ReturnType<typeof classesOn>[number] | null; minutes: number | null; mode: 'left' | 'until'; loading: boolean }) {
   return (
     <section className="card card-pad relative overflow-hidden animate-fade-up">
-      <div className="absolute inset-y-0 left-0 w-1.5" style={{ background: event?.colour ?? 'transparent' }} />
+      <div className="absolute inset-y-0 left-0 w-1.5" style={{ background: event ? readableAccent(event.colour) : 'transparent' }} />
       <h2 className="text-sm font-semibold uppercase tracking-wider text-sky/90">{label}</h2>
       {loading ? (
         <Skeleton className="mt-3 h-16" />
@@ -170,7 +172,7 @@ function NowCard({ label, event, minutes, mode, loading }: { label: string; even
           <p className="mt-1 flex flex-wrap gap-x-3 text-sm text-slate-400">
             <span className="font-mono">{timeRange(event)}</span>
             {event.location && <span>{event.location}</span>}
-            {event.detail && <span>{stripHtml(event.detail)}</span>}
+            {subline(event) && <span>{subline(event)}</span>}
           </p>
           {minutes !== null && (
             <p className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-white/5 px-2.5 py-1 text-xs text-slate-200">

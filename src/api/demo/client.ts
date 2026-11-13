@@ -16,6 +16,9 @@ export class DemoApi implements PortalApi {
     if (!path) return undefined;
     return /^https?:/i.test(path) ? path : this.origin + path;
   }
+  proxied(path: string | null | undefined) {
+    return this.absolute(path);
+  }
 
   async login(username: string, _password: string): Promise<SessionInfo> {
     await wait(this.latency * 2);

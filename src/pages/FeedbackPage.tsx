@@ -1,7 +1,8 @@
 import { format } from 'date-fns';
-import { Award, MessageSquareQuote, Sparkles } from 'lucide-react';
+import { Award, ExternalLink, MessageSquareQuote, Sparkles } from 'lucide-react';
 import { useState } from 'react';
 import type { EvidenceFeedItem } from '@/api/types';
+import { stripHtml } from '@/api/adapters';
 import { useAuth } from '@/auth/AuthContext';
 import { Card, EmptyState, ErrorBanner, PageHeader, Skeleton } from '@/components/ui';
 import { useAsync } from '@/hooks/useAsync';
@@ -45,7 +46,11 @@ export default function FeedbackPage() {
             const k = kindOf(it);
             const o = it.object;
             const Icon = k === 'badge' ? Award : k === 'feedback' ? MessageSquareQuote : Sparkles;
-            const teacher = o.creator ? [o.creator.firstName, o.creator.lastName].filter(Boolean).join(' ') : '';
+            const person = o.instructor ?? o.creator;
+            const teacher = person?.fullName || (person ? [person.firstName, person.lastName].filter(Boolean).join(' ') : '');
+            const folder = o.assessment?.folderName || o.assessment?.folder?.name;
+            const text = stripHtml((o.comment as string) || (o.body as string));
+            const link = api.absolute(o._links?.summary);
             return (
               <li key={`${k}-${o.id ?? i}`} className="relative">
                 <span className={`absolute -left-[29px] top-3 flex h-5 w-5 items-center justify-center rounded-full ring-4 ring-navy-950 ${k === 'badge' ? 'bg-gold text-navy-950' : 'bg-navy-600 text-white'}`}>
@@ -60,12 +65,13 @@ export default function FeedbackPage() {
                   </div>
                   {k === 'feedback' && (
                     <p className="mt-0.5 text-xs text-slate-400">
-                      {o.assessment?.folder?.name}
-                      {o.mark ? ` · Mark: ` : ''}
+                      {[folder, o.assessment?.workType].filter(Boolean).join(' · ')}
+                      {o.mark ? ' · Mark: ' : ''}
                       {o.mark && <span className="font-mono font-semibold text-gold">{o.mark}</span>}
+                      {!o.mark && typeof o.normalisedMark === 'number' && <span className="font-mono font-semibold text-gold"> · {o.normalisedMark}</span>}
                     </p>
                   )}
-                  {(o.comment || o.body) && <p className="mt-2 text-sm leading-6 text-slate-200">{(o.comment as string) || (o.body as string)}</p>}
+                  {text && <p className="mt-2 whitespace-pre-line text-sm leading-6 text-slate-200">{text}</p>}
                   <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-slate-400">
                     {teacher && <span>{teacher}</span>}
                     {o.tags?.map((t) => (
@@ -73,6 +79,11 @@ export default function FeedbackPage() {
                         {t.name}
                       </span>
                     ))}
+                    {link && (
+                      <a href={link} target="_blank" rel="noreferrer" className="ml-auto inline-flex items-center gap-1 text-sky hover:underline">
+                        Open in iLINQ <ExternalLink className="h-3 w-3" />
+                      </a>
+                    )}
                   </div>
                 </Card>
               </li>

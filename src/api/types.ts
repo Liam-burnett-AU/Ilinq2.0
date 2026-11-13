@@ -100,16 +100,22 @@ export interface SessionInfo {
   username: string;
 }
 
-/** GET /calendar/ajax/full item (FullCalendar-shaped). */
+/** Schoolbox links come as plain strings or `{href, auth}` objects. */
+export type SbLink = string | { href: string; auth?: boolean | null };
+
+/** GET /calendar/ajax/full item (FullCalendar-shaped). Field set observed on Schoolbox 26.1. */
 export interface CalendarAjaxEvent {
   resourceId?: string | number | null;
   title: string;
   /** RFC3339 date-time, or YYYY-MM-DD when allDay. */
   start: string;
+  /** RFC3339 date-time, YYYY-MM-DD (exclusive) when allDay, or "" for due work. */
   end: string;
   editable: boolean;
   allDay: boolean;
+  /** "#rrggbb" or "rgba(r, g, b, a)". */
   color: string;
+  /** e.g. "source7 type1 group38259" (class), "source2 type4 personal" (due work), "source1 type1 group…" (event). */
   className: string;
   data: {
     meta?: {
@@ -121,17 +127,33 @@ export interface CalendarAjaxEvent {
       eventTypeId?: number;
       eventType?: string;
       variant?: string;
+      /** Human label: "", "Due Work", "College Event", "Term Weeks", "Reminders", "Sport", … */
       type?: string;
       author?: string;
       authorId?: number;
       level?: string;
       completed?: boolean;
       seriesId?: number | string | null;
+      // due work only
+      title?: string;
+      folderName?: string;
+      folderId?: number;
+      workType?: string | null;
+      workTypeId?: number;
+      weighted?: number;
+      assessmentType?: string;
+      colour?: string;
     };
-    links?: { category?: NamedId | { id: number; name: string }; path?: string | null };
-    styles?: { visible?: string };
-    attendance?: { hasAttendance?: boolean; status?: { current?: 1 | 2 | 3 | null } };
+    /** Object for events/classes; an empty array for due work. */
+    links?: { category?: NamedId; path?: string | null } | unknown[];
+    styles?: { visible?: string | boolean };
+    attendance?: { hasAttendance?: boolean; status?: { current?: 1 | 2 | 3 | null } | boolean };
+    /** Present (even with null url) on timetable class events. */
     classAttendance?: { url?: string | null; target?: string | null };
+    /** Present on timetable class events. */
+    timetable?: { code?: string };
+    /** Present on due work events. */
+    custom?: { modifyLink?: string | false; moreDetailsLink?: string | false };
   };
 }
 
@@ -143,9 +165,10 @@ export interface NewsTopic {
 }
 
 export interface NewsFeatureImage {
+  hash?: string;
   mime?: string;
   size?: number;
-  _links?: { image?: { href: string; auth?: boolean | null } };
+  _links?: { image?: SbLink; fetch?: SbLink };
 }
 
 /** Item from GET /news/lists/feed. */
@@ -163,7 +186,9 @@ export interface NewsFeedItem {
   metadata?: { commentCount?: number | null };
   attachments?: number | null;
   viewedAt?: string | null;
-  _links?: { self?: string; saveForLater?: string; unsaveForLater?: string; update?: string };
+  sticky?: boolean;
+  author?: NewsAuthor;
+  _links?: { self?: SbLink; saveForLater?: SbLink; unsaveForLater?: SbLink; update?: SbLink };
 }
 
 export interface NewsAuthor {
@@ -174,6 +199,7 @@ export interface NewsAuthor {
   fullname?: string;
   preferredName?: string | null;
   givenName?: string;
+  _links?: { profile?: SbLink; avatar?: SbLink };
 }
 
 export interface SbFile {
@@ -182,7 +208,7 @@ export interface SbFile {
   mime?: string;
   type?: 'image' | 'video' | 'audio' | 'document' | 'other';
   size?: number;
-  _links?: { icon?: string; image?: string; stream?: string; poster?: string; download?: string };
+  _links?: { icon?: SbLink; image?: SbLink; stream?: SbLink; poster?: SbLink; download?: SbLink; fetch?: SbLink };
 }
 
 /** GET /news/{id}. */
@@ -247,9 +273,13 @@ export interface EvidenceFeedItem {
     name?: string;
     comment?: string;
     mark?: string | null;
-    creator?: { firstName?: string | null; lastName?: string | null; _links?: { avatar?: string } };
+    creator?: { firstName?: string | null; lastName?: string | null; fullName?: string; _links?: { avatar?: string } };
+    instructor?: { firstName?: string | null; lastName?: string | null; fullName?: string; _links?: { avatar?: string } };
     tags?: { name: string }[];
-    assessment?: { id?: number; title?: string; folder?: { name?: string } };
+    normalisedMark?: number | null;
+    gradientMark?: string | null;
+    publishedAt?: string;
+    assessment?: { id?: number; title?: string; folder?: { name?: string }; folderName?: string; folderId?: number; dueAt?: string; workType?: string; weight?: number };
     _links?: Record<string, string>;
   };
 }

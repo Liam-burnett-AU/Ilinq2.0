@@ -22,6 +22,8 @@ export interface PortalApi {
   readonly kind: 'live' | 'demo';
   /** Absolute URL for a Schoolbox-relative link (e.g. "/homepage/83"). */
   absolute(path: string | null | undefined): string | undefined;
+  /** URL for a Schoolbox asset (image, avatar) that still carries the session: same-origin via the proxy. */
+  proxied(path: string | null | undefined): string | undefined;
 
   login(username: string, password: string): Promise<SessionInfo>;
   loginWithJwt(jwt: string): Promise<SessionInfo>;
