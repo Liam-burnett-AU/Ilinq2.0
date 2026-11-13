@@ -66,6 +66,10 @@ and the proxy becomes unnecessary (CORS permitting).
 Bearer-token mode (profile → *API token*) sends `Authorization: Bearer <jwt>`
 instead of a cookie and works through the same proxy.
 
+To get a token without signing in with a password first, sign in to classic
+iLINQ, open the browser console and paste `scripts/get-token.js`. It creates a
+scoped token and copies it to your clipboard.
+
 ## Project layout
 
 ```
