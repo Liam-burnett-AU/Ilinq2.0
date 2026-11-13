@@ -1,0 +1,12 @@
+{
+  "name": "iLINQ 2.0",
+  "short_name": "iLINQ",
+  "description": "Sheldon College iLINQ, rebuilt: timetable, due work, news and calendar in one fast app.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#04122a",
+  "theme_color": "#00295c",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

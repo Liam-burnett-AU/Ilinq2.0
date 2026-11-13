@@ -1,0 +1,103 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  --sheldon-primary: #00295c;
+  --sheldon-secondary: #a3c1e7;
+  --sheldon-accent: #fbd708;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  @apply bg-navy-950 text-slate-100;
+  background-image: radial-gradient(1200px 600px at 10% -10%, rgba(0, 41, 92, 0.55), transparent 60%),
+    radial-gradient(900px 500px at 110% 10%, rgba(61, 92, 147, 0.25), transparent 60%);
+  background-attachment: fixed;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(163, 193, 231, 0.25) transparent;
+}
+
+@layer components {
+  .card {
+    @apply rounded-2xl border border-white/5 bg-navy-900/70 shadow-card backdrop-blur-sm;
+  }
+  .card-pad {
+    @apply p-4 sm:p-5;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-3.5 py-2 text-sm font-medium transition
+      focus:outline-none focus-visible:ring-2 focus-visible:ring-sky/70 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply btn bg-navy-500 text-white hover:bg-navy-400;
+  }
+  .btn-ghost {
+    @apply btn bg-white/5 text-slate-100 hover:bg-white/10;
+  }
+  .btn-accent {
+    @apply btn bg-gold text-navy-950 hover:bg-gold-600;
+  }
+  .input {
+    @apply w-full rounded-xl border border-white/10 bg-navy-950/70 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500
+      focus:border-sky/60 focus:outline-none focus:ring-2 focus:ring-sky/30;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-xs font-medium text-slate-200;
+  }
+  .nav-link {
+    @apply flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-slate-300 transition hover:bg-white/5 hover:text-white;
+  }
+  .nav-link-active {
+    @apply bg-navy-700/70 text-white shadow-inner;
+  }
+  .prose-sb {
+    @apply text-[15px] leading-7 text-slate-200;
+  }
+  .prose-sb p {
+    @apply my-3;
+  }
+  .prose-sb h2,
+  .prose-sb h3 {
+    @apply mt-6 mb-2 font-semibold text-white;
+  }
+  .prose-sb ul {
+    @apply my-3 list-disc pl-6;
+  }
+  .prose-sb ol {
+    @apply my-3 list-decimal pl-6;
+  }
+  .prose-sb a {
+    @apply text-sky underline underline-offset-2;
+  }
+  .prose-sb img {
+    @apply my-4 max-w-full rounded-xl;
+  }
+  .prose-sb table {
+    @apply my-4 w-full text-sm;
+  }
+  .prose-sb td,
+  .prose-sb th {
+    @apply border border-white/10 px-2 py-1;
+  }
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+}
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+  z-index: 100;
+  @apply rounded-lg bg-gold px-3 py-2 text-navy-950;
+}
