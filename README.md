@@ -8,7 +8,7 @@ nothing to migrate and no second login. Classic iLINQ keeps working alongside it
 | | |
 |---|---|
 | **Stack** | Vite 5 · React 18 · TypeScript · Tailwind CSS · react-router · date-fns |
-| **Data** | Schoolbox REST API (session cookie or scoped JWT), through a same-origin proxy |
+| **Data** | Schoolbox REST API (session cookie or scoped JWT), through a same-origin proxy (Node server or Cloudflare Worker) |
 | **Design** | Dark mode only, Sheldon College palette (`#00295c` / `#a3c1e7` / `#fbd708` sparingly), designated logo slot |
 | **Offline dev** | Built-in demo mode with fixtures in the exact API response shapes |
 
@@ -44,6 +44,15 @@ npm start                # serves dist/ and proxies /sb -> ilinq.sheldoncollege.
 
 or `docker build -t ilinq2 . && docker run -p 8080:8080 ilinq2`.
 
+### Cloudflare Workers
+
+The repo ships a Worker (`worker/index.ts` + `wrangler.jsonc`) that serves
+`dist/` as static assets and proxies `/sb/*` to iLINQ, so Workers Builds just
+needs **build command** `npm run build` and **deploy command** `npx wrangler deploy`
+(or run `npm run cf:deploy` locally). `SCHOOLBOX_ORIGIN` and `API_BASE` are
+plain vars in `wrangler.jsonc`; override them in the dashboard if needed.
+`npm run cf:dev` runs the same Worker locally on http://localhost:8787.
+
 ### Why a proxy?
 
 Schoolbox authenticates browser calls with its `PHPSESSID` cookie. Serving the
@@ -68,7 +77,8 @@ src/
   pages/      Today, Timetable, Calendar, Due work, News, Article, Feedback, Classes, Search, Profile, Login
   lib/        config, HTML sanitiser
   test/       vitest unit tests (adapters, client)
-server/proxy.mjs   zero-dependency static + reverse proxy server
+server/proxy.mjs   zero-dependency static + reverse proxy server (Node hosting)
+worker/index.ts    the same proxy as a Cloudflare Worker (wrangler.jsonc)
 docs/              API mapping and design notes
 ```
 

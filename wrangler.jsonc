@@ -1,0 +1,21 @@
+// Cloudflare Workers config for iLINQ 2.0.
+// Build: npm run build  ->  Deploy: npx wrangler deploy
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ilinq2-0",
+  "main": "worker/index.ts",
+  "compatibility_date": "2025-10-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    // API calls must reach the Worker, not the static asset handler.
+    "run_worker_first": ["/sb", "/sb/*"]
+  },
+  "vars": {
+    "SCHOOLBOX_ORIGIN": "https://ilinq.sheldoncollege.com",
+    "API_BASE": "/sb"
+  },
+  "observability": { "enabled": true }
+}
