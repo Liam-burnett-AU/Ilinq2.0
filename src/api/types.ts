@@ -306,6 +306,32 @@ export interface AssessmentList {
   metadata?: ListMetadata;
 }
 
+/** GET /group/getData/{id} */
+export interface GroupMember {
+  id: number;
+  _links?: { profile?: string; avatar?: string };
+  title?: string | null;
+  firstName: string;
+  preferredName?: string | null;
+  givenName?: string;
+  lastName?: string | null;
+  fullName: string;
+  role?: string;
+  roleType?: RoleType;
+  isStaff?: boolean;
+  campus?: string;
+  yearLevel?: string;
+  house?: string;
+  accessType?: 'read' | 'write' | 'admin';
+}
+
+export interface GroupData {
+  groupId: number;
+  groupName: string;
+  settings?: { access?: 'private' | 'moderated' | 'free'; isNotificationsEnabled?: boolean; isForceFollow?: boolean };
+  members: GroupMember[];
+}
+
 export interface UserToken {
   token?: string;
   name?: string | null;

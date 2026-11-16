@@ -15,6 +15,7 @@ nothing to migrate and no second login. Classic iLINQ keeps working alongside it
 ## What's better than classic iLINQ
 
 - **Everything in iLINQ is reachable.** Each class and group has its own page (due work, next lessons, resources, class news) with the *full classic class page embedded underneath*, served through the proxy so it is the real thing with your session. Messages, notifications, ePortfolio, reports, files and the classic calendar are embedded the same way under *iLINQ pages* in the sidebar.
+- **Class lists with photos.** Every class page has a Class list tab: teachers and students with portraits, house and year level, searchable, as a photo grid or a list. Portraits also show on the timetable, class tiles, feedback and news authors.
 - **Your layout, your look.** Open *Customise* to pick a theme (Blueprint, Midnight, Ink), reorder widgets by drag and drop or arrows, resize them to half or full width, hide the ones you don't want, hide nav items, and switch density. Saved on your device.
 
 - **Today view that answers "what's next?"** Current/next class with minutes remaining, due work sorted into overdue / today / this week, today's events, latest unread news, all on one screen.

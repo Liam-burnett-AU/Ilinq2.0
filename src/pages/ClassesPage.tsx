@@ -4,11 +4,12 @@ import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { readableAccent, summariseClasses } from '@/api/adapters';
 import { useAuth } from '@/auth/AuthContext';
+import { Avatar } from '@/components/Avatar';
 import { Card, EmptyState, ErrorBanner, PageHeader, Skeleton } from '@/components/ui';
 import { useCalendarRange } from '@/hooks/useCalendar';
 
 export default function ClassesPage() {
-  const { user } = useAuth();
+  const { user, api } = useAuth();
   // Classes are not in the user's group list on Schoolbox; derive them from two weeks of timetable.
   const monday = useMemo(() => startOfWeek(startOfDay(new Date()), { weekStartsOn: 1 }), []);
   const cal = useCalendarRange(addDays(monday, -7), addDays(monday, 14));
@@ -31,8 +32,9 @@ export default function ClassesPage() {
                 const to = c.folderId ? `/classes/${c.folderId}` : undefined;
                 const inner = (
                   <>
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg font-mono text-[10px] font-semibold text-ink" style={{ background: readableAccent(c.colour) }}>
-                      {c.code.split('-')[1]?.replace(/\d+$/, '').slice(0, 4) || c.subject.slice(0, 3).toUpperCase()}
+                    <span className="relative shrink-0">
+                      <Avatar src={api.avatar(c.teacherId)} name={c.teacher ?? c.subject} size={40} />
+                      <span className="absolute -bottom-1 -right-1 h-3 w-3 rounded-full ring-2 ring-navy-900" style={{ background: readableAccent(c.colour) }} />
                     </span>
                     <span className="min-w-0 flex-1">
                       <span className="block truncate text-sm font-medium text-ink">{c.subject}</span>

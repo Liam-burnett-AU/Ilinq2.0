@@ -4,6 +4,7 @@ import { useState } from 'react';
 import type { EvidenceFeedItem } from '@/api/types';
 import { stripHtml } from '@/api/adapters';
 import { useAuth } from '@/auth/AuthContext';
+import { Avatar } from '@/components/Avatar';
 import { Card, EmptyState, ErrorBanner, PageHeader, Skeleton } from '@/components/ui';
 import { useAsync } from '@/hooks/useAsync';
 
@@ -73,7 +74,12 @@ export default function FeedbackPage() {
                   )}
                   {text && <p className="mt-2 whitespace-pre-line text-sm leading-6 text-ink/90">{text}</p>}
                   <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-ink-muted">
-                    {teacher && <span>{teacher}</span>}
+                    {teacher && (
+                      <span className="inline-flex items-center gap-1.5">
+                        <Avatar src={api.proxied(person?._links?.avatar) ?? api.avatar((person as { id?: number } | undefined)?.id)} name={teacher} size={22} rounded="rounded-full" />
+                        {teacher}
+                      </span>
+                    )}
                     {o.tags?.map((t) => (
                       <span key={t.name} className="chip">
                         {t.name}

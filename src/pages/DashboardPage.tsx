@@ -4,6 +4,7 @@ import { useMemo, useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { bucketDueWork, classesOn, isUnread, nowAndNext, onDay, readableAccent, stripHtml, summariseClasses, termWeekFor, type PortalEvent } from '@/api/adapters';
 import { useAuth } from '@/auth/AuthContext';
+import { Avatar } from '@/components/Avatar';
 import { EventRow, subline, timeRange } from '@/components/EventCard';
 import { Card, EmptyState, ErrorBanner, Skeleton } from '@/components/ui';
 import { useAsync } from '@/hooks/useAsync';
@@ -38,7 +39,7 @@ export default function DashboardPage() {
   const [overIdx, setOverIdx] = useState<number | null>(null);
 
   const widgets: Record<WidgetId, ReactNode> = {
-    nowNext: <NowCard label={current ? 'Now' : 'Up next'} event={current ?? next} minutes={current ? minutesLeft : minutesToNext} mode={current ? 'left' : 'until'} loading={cal.loading} />,
+    nowNext: <NowCard label={current ? 'Now' : 'Up next'} event={current ?? next} minutes={current ? minutesLeft : minutesToNext} mode={current ? 'left' : 'until'} loading={cal.loading} avatar={api.avatar((current ?? next)?.authorId)} />,
     dueSoon: (
       <Card title="Due soon" action={<Link to="/due-work" className="text-xs text-sky hover:underline">All due work</Link>}>
         {cal.loading ? (
@@ -77,6 +78,7 @@ export default function DashboardPage() {
                       <span className="block truncate text-sm font-medium text-ink">{c.title}</span>
                       <span className="block truncate text-xs text-ink-muted">{[c.location, subline(c)].filter(Boolean).join(' · ')}</span>
                     </span>
+                    {c.authorId && <Avatar src={api.avatar(c.authorId)} name={c.author ?? ''} size={28} rounded="rounded-full" />}
                   </Link>
                 </li>
               );
@@ -131,6 +133,7 @@ export default function DashboardPage() {
               <li key={c.code || c.subject}>
                 <Link to={c.folderId ? `/classes/${c.folderId}` : '/classes'} className="flex h-full items-center gap-2.5 rounded-card border border-line/10 bg-white/[0.02] px-2.5 py-2 transition hover:bg-white/[0.06]">
                   <span className="h-8 w-1 shrink-0 rounded-full" style={{ background: readableAccent(c.colour) }} />
+                  <Avatar src={api.avatar(c.teacherId)} name={c.teacher ?? c.subject} size={30} rounded="rounded-full" />
                   <span className="min-w-0">
                     <span className="block truncate text-sm font-medium text-ink">{c.subject}</span>
                     <span className="block truncate font-mono text-[11px] text-ink-muted">{c.code || c.teacher}</span>
@@ -275,11 +278,14 @@ export default function DashboardPage() {
   );
 }
 
-function NowCard({ label, event, minutes, mode, loading }: { label: string; event: PortalEvent | null; minutes: number | null; mode: 'left' | 'until'; loading: boolean }) {
+function NowCard({ label, event, minutes, mode, loading, avatar }: { label: string; event: PortalEvent | null; minutes: number | null; mode: 'left' | 'until'; loading: boolean; avatar?: string }) {
   return (
     <section className="card card-pad relative min-w-0 overflow-hidden animate-fade-up">
       <div className="absolute inset-y-0 left-0 w-1.5" style={{ background: event ? readableAccent(event.colour) : 'transparent' }} />
-      <h2 className="card-title">{label}</h2>
+      <div className="flex items-start justify-between gap-3">
+        <h2 className="card-title">{label}</h2>
+        {event?.author && <Avatar src={avatar} name={event.author} size={44} />}
+      </div>
       {loading ? (
         <Skeleton className="mt-3 h-16" />
       ) : event ? (

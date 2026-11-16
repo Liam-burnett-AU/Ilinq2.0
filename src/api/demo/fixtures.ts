@@ -1,5 +1,5 @@
 import { addDays, formatISO, set, startOfWeek } from 'date-fns';
-import type { CalendarAjaxEvent, EvidenceFeedItem, NewsArticleResponse, NewsFeedItem, NewsTopic, SearchResult, User } from '../types';
+import type { CalendarAjaxEvent, EvidenceFeedItem, GroupData, NewsArticleResponse, NewsFeedItem, NewsTopic, SearchResult, User } from '../types';
 
 // Demo data in the exact shapes the Schoolbox API returns, generated relative
 // to "now" so the dashboard always looks alive. Names are fictional.
@@ -105,6 +105,7 @@ const GRID: number[][] = [
   [4, 0, 3, 2, 6],
 ];
 
+const TEACHER_IDS: Record<number, number> = { 38233: 10201, 38256: 10202, 38259: 10203, 38227: 10204, 38241: 10205, 38236: 10206, 38228: 10207 };
 const iso = (d: Date) => formatISO(d);
 const at = (day: Date, [h, m]: readonly [number, number] | number[]) => set(day, { hours: h, minutes: m, seconds: 0, milliseconds: 0 });
 const dateOnly = (d: Date) => formatISO(d, { representation: 'date' });
@@ -140,7 +141,7 @@ function classEvent(day: Date, p: (typeof PERIODS)[number], s: Subject, eventId:
         variant: 'event',
         type: '',
         author: s.teacher,
-        authorId: 10135,
+        authorId: TEACHER_IDS[s.folderId] ?? 10135,
         level: `source7 type1 group${s.folderId}`,
         completed: false,
       },
@@ -457,4 +458,82 @@ export const DEMO_FOLDER_ITEMS = (folderId: number): SearchResult[] => {
     { id: folderId * 10 + 6, type: 'forum', url: `/homepage/${folderId}/discussion`, title: 'Class discussion', meta: 'Discussion', icon: 'forum' },
     { id: folderId * 10 + 7, type: 'file.video', url: `/send.php?id=${folderId * 10 + 7}`, title: 'Revision walkthrough.mp4', meta: 'Resources', icon: 'video', date: daysAgo(6) },
   ];
+};
+
+/** Deterministic SVG "portrait" (initials on a tinted square) for demo users. */
+export function demoPortrait(userId: number, name?: string): string {
+  const palette = ['#2a5fa3', '#0f7c6d', '#7a3fa3', '#b3541e', '#8a6d1f', '#1f7a8c', '#3d5c93', '#a22237'];
+  const bg = palette[userId % palette.length];
+  const initials = (name ?? DEMO_PEOPLE.find((p) => p.id === userId)?.fullName ?? 'S')
+    .replace(/^(Mr|Mrs|Ms|Dr|Miss)\s+/, '')
+    .split(/\s+/)
+    .map((w) => w[0])
+    .slice(0, 2)
+    .join('')
+    .toUpperCase();
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" fill="${bg}"/><circle cx="32" cy="24" r="11" fill="rgba(255,255,255,0.18)"/><ellipse cx="32" cy="58" rx="20" ry="14" fill="rgba(255,255,255,0.18)"/><text x="32" y="38" font-family="system-ui,sans-serif" font-size="20" font-weight="700" fill="#fff" text-anchor="middle">${initials}</text></svg>`;
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+}
+
+const DEMO_PEOPLE: { id: number; fullName: string; firstName: string; lastName: string; house: string; staff?: boolean; title?: string }[] = [
+  { id: 4690, fullName: 'Sam Reed', firstName: 'Sam', lastName: 'Reed', house: 'Integra' },
+  { id: 4701, fullName: 'Aisha Khan', firstName: 'Aisha', lastName: 'Khan', house: 'Integra' },
+  { id: 4702, fullName: 'Tom Nguyen', firstName: 'Tom', lastName: 'Nguyen', house: 'Veritas' },
+  { id: 4703, fullName: 'Priya Patel', firstName: 'Priya', lastName: 'Patel', house: 'Fidelis' },
+  { id: 4704, fullName: 'Jack O\'Brien', firstName: 'Jack', lastName: "O'Brien", house: 'Integra' },
+  { id: 4705, fullName: 'Mia Thompson', firstName: 'Mia', lastName: 'Thompson', house: 'Veritas' },
+  { id: 4706, fullName: 'Lucas Silva', firstName: 'Lucas', lastName: 'Silva', house: 'Fidelis' },
+  { id: 4707, fullName: 'Chloe Wang', firstName: 'Chloe', lastName: 'Wang', house: 'Integra' },
+  { id: 4708, fullName: 'Ethan Brown', firstName: 'Ethan', lastName: 'Brown', house: 'Veritas' },
+  { id: 4709, fullName: 'Zara Ahmed', firstName: 'Zara', lastName: 'Ahmed', house: 'Fidelis' },
+  { id: 4710, fullName: 'Noah Williams', firstName: 'Noah', lastName: 'Williams', house: 'Integra' },
+  { id: 4711, fullName: 'Isla Murphy', firstName: 'Isla', lastName: 'Murphy', house: 'Veritas' },
+  { id: 4712, fullName: 'Kai Tanaka', firstName: 'Kai', lastName: 'Tanaka', house: 'Fidelis' },
+  { id: 4713, fullName: 'Grace Lee', firstName: 'Grace', lastName: 'Lee', house: 'Integra' },
+  { id: 4714, fullName: 'Oscar Jones', firstName: 'Oscar', lastName: 'Jones', house: 'Veritas' },
+  { id: 4715, fullName: 'Ruby Singh', firstName: 'Ruby', lastName: 'Singh', house: 'Fidelis' },
+  { id: 4716, fullName: 'Liam Taylor', firstName: 'Liam', lastName: 'Taylor', house: 'Integra' },
+  { id: 4717, fullName: 'Ava Martin', firstName: 'Ava', lastName: 'Martin', house: 'Veritas' },
+  { id: 10135, fullName: 'Mr Sam Trafford', firstName: 'Sam', lastName: 'Trafford', house: '', staff: true, title: 'Mr' },
+  { id: 10201, fullName: 'Ms Rebecca White', firstName: 'Rebecca', lastName: 'White', house: '', staff: true, title: 'Ms' },
+  { id: 10202, fullName: 'Mr David Chen', firstName: 'David', lastName: 'Chen', house: '', staff: true, title: 'Mr' },
+  { id: 10203, fullName: 'Dr Anjali Nair', firstName: 'Anjali', lastName: 'Nair', house: '', staff: true, title: 'Dr' },
+  { id: 10204, fullName: 'Mr Kwame Osei', firstName: 'Kwame', lastName: 'Osei', house: '', staff: true, title: 'Mr' },
+  { id: 10205, fullName: 'Mrs Laura Byrne', firstName: 'Laura', lastName: 'Byrne', house: '', staff: true, title: 'Mrs' },
+  { id: 10206, fullName: 'Mr Tim Hale', firstName: 'Tim', lastName: 'Hale', house: '', staff: true, title: 'Mr' },
+  { id: 10207, fullName: 'Ms Preet Kaur', firstName: 'Preet', lastName: 'Kaur', house: '', staff: true, title: 'Ms' },
+];
+
+const TEACHER_FOR_FOLDER: Record<number, number> = { 38233: 10201, 38256: 10202, 38259: 10203, 38227: 10204, 38241: 10205, 38236: 10206, 38228: 10207, 23574: 10204, 10860: 10205, 22819: 10135 };
+
+/** Members of a class/group, as /group/getData/{id} returns them. */
+export const DEMO_GROUP = (folderId: number): GroupData => {
+  const s = SUBJECTS.find((x) => x.folderId === folderId);
+  const group = DEMO_STUDENT.groups?.find((g) => g.id === folderId);
+  const teacherId = TEACHER_FOR_FOLDER[folderId] ?? 10135;
+  const teacher = DEMO_PEOPLE.find((p) => p.id === teacherId)!;
+  const students = DEMO_PEOPLE.filter((p) => !p.staff).filter((_, i) => ((i * 7 + folderId) % 5) !== 0 || i === 0);
+  const toMember = (p: (typeof DEMO_PEOPLE)[number]) => ({
+    id: p.id,
+    _links: { profile: `/search/user/${p.id}`, avatar: `/portrait.php?id=${p.id}&size=square64` },
+    title: p.title ?? null,
+    firstName: p.firstName,
+    preferredName: null,
+    givenName: p.firstName,
+    lastName: p.lastName,
+    fullName: p.fullName,
+    role: p.staff ? 'Teaching Staff' : 'Year 10 Student',
+    roleType: (p.staff ? 'staff' : 'student') as 'staff' | 'student',
+    isStaff: !!p.staff,
+    campus: 'Senior College',
+    yearLevel: p.staff ? '' : '10',
+    house: p.house,
+    accessType: (p.staff ? 'admin' : 'read') as 'admin' | 'read',
+  });
+  return {
+    groupId: folderId,
+    groupName: s ? `${s.name} (${s.code})` : group?.name ?? `Group ${folderId}`,
+    settings: { access: group?.type ?? 'private', isNotificationsEnabled: true, isForceFollow: !!group?.isForceFollow },
+    members: [toMember(teacher), ...students.map(toMember)],
+  };
 };

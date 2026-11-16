@@ -4,14 +4,16 @@ import { useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { bucketDueWork, isUnread, readableAccent, stripHtml, summariseClasses } from '@/api/adapters';
 import { useAuth } from '@/auth/AuthContext';
+import { Avatar } from '@/components/Avatar';
 import { ClassicFrame } from '@/components/ClassicFrame';
+import { ClassList } from '@/components/ClassList';
 import { EventRow } from '@/components/EventCard';
 import { Card, EmptyState, ErrorBanner, PageHeader, Skeleton } from '@/components/ui';
 import { useAsync } from '@/hooks/useAsync';
 import { useCalendarRange } from '@/hooks/useCalendar';
 import { useNow } from '@/hooks/useNow';
 
-type Tab = 'overview' | 'classic';
+type Tab = 'overview' | 'people' | 'classic';
 
 export default function ClassPage() {
   const { id } = useParams();
@@ -45,17 +47,22 @@ export default function ClassPage() {
         subtitle={
           <span className="flex flex-wrap items-center gap-x-3 gap-y-1">
             {cls?.code && <span className="font-mono">{cls.code}</span>}
-            {cls?.teacher && <span>{cls.teacher}</span>}
+            {cls?.teacher && (
+              <span className="inline-flex items-center gap-1.5">
+                <Avatar src={api.avatar(cls.teacherId)} name={cls.teacher} size={22} rounded="rounded-full" />
+                {cls.teacher}
+              </span>
+            )}
             {cls?.rooms.length ? <span>{cls.rooms.join(', ')}</span> : null}
             {group?.type && <span className="chip">{group.type}</span>}
           </span>
         }
         actions={
           <>
-            <div className="grid grid-cols-2 gap-1 rounded-card bg-white/5 p-1 text-sm" role="tablist">
-              {(['overview', 'classic'] as Tab[]).map((t) => (
+            <div className="grid grid-cols-3 gap-1 rounded-card bg-white/5 p-1 text-sm" role="tablist">
+              {(['overview', 'people', 'classic'] as Tab[]).map((t) => (
                 <button key={t} role="tab" aria-selected={tab === t} className={`rounded-card px-3 py-1.5 transition ${tab === t ? 'bg-navy-700 text-ink' : 'text-ink-muted hover:text-ink'}`} onClick={() => setTab(t)}>
-                  {t === 'overview' ? 'Overview' : 'Full page'}
+                  {t === 'overview' ? 'Overview' : t === 'people' ? 'Class list' : 'Full page'}
                 </button>
               ))}
             </div>
@@ -69,6 +76,8 @@ export default function ClassPage() {
 
       {tab === 'classic' ? (
         <ClassicFrame path={`/homepage/${folderId}`} title={`${title} on iLINQ`} />
+      ) : tab === 'people' ? (
+        <ClassList folderId={folderId} title={title} />
       ) : (
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
           <div className="min-w-0 space-y-5 lg:col-span-2">

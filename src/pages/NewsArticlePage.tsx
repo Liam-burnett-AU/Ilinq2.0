@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { hrefOf, newsImage } from '@/api/adapters';
 import { useAuth } from '@/auth/AuthContext';
+import { Avatar } from '@/components/Avatar';
 import { ErrorBanner, Skeleton } from '@/components/ui';
 import { invalidate, useAsync } from '@/hooks/useAsync';
 import { sanitiseHtml } from '@/lib/sanitise';
@@ -56,7 +57,12 @@ export default function NewsArticlePage() {
           </div>
           <h1 className="mt-2 text-2xl font-semibold tracking-tight text-ink sm:text-3xl">{a.title}</h1>
           <p className="mt-2 flex flex-wrap items-center gap-x-3 text-sm text-ink-muted">
-            {a.author?.fullname && <span>{a.author.fullname}</span>}
+            {a.author?.fullname && (
+              <span className="inline-flex items-center gap-1.5">
+                <Avatar src={api.proxied(hrefOf(a.author._links?.avatar)) ?? api.avatar(a.author.id)} name={a.author.fullname} size={22} rounded="rounded-full" />
+                {a.author.fullname}
+              </span>
+            )}
             <span className="font-mono">{format(new Date(a.publishAt), 'EEEE d MMMM yyyy, h:mma').toLowerCase()}</span>
             <button className="ml-auto inline-flex items-center gap-1 rounded-lg px-2 py-1 hover:bg-white/10 hover:text-ink" onClick={toggleSave}>
               {saved ? <BookmarkCheck className="h-4 w-4 text-gold" /> : <Bookmark className="h-4 w-4" />} {saved ? 'Saved' : 'Save'}

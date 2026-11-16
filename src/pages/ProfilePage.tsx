@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { UserToken } from '@/api/types';
 import { useAuth } from '@/auth/AuthContext';
+import { Avatar } from '@/components/Avatar';
 import { Card, PageHeader } from '@/components/ui';
 import { config } from '@/lib/config';
 
@@ -25,7 +26,7 @@ export default function ProfilePage() {
   const [err, setErr] = useState<string | null>(null);
 
   if (!user) return null;
-  const avatar = api.proxied(user._links?.avatar);
+  const avatar = api.proxied(user._links?.avatar) ?? api.avatar(user.id, 'square72');
 
   const makeToken = async () => {
     setBusy(true);
@@ -44,9 +45,7 @@ export default function ProfilePage() {
       <PageHeader title="Profile & settings" />
       <Card>
         <div className="flex items-center gap-4">
-          <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-card bg-navy-700 text-xl font-semibold text-sky">
-            {avatar ? <img src={avatar} alt="" className="h-full w-full object-cover" /> : (user.preferredName || user.firstName)[0]}
-          </div>
+          <Avatar src={avatar} name={user.fullName || `${user.firstName} ${user.lastName ?? ''}`} size={72} />
           <div className="min-w-0">
             <h2 className="truncate text-xl font-semibold text-ink">{user.fullName || `${user.firstName} ${user.lastName ?? ''}`}</h2>
             <p className="text-sm text-ink-muted">
@@ -84,7 +83,7 @@ export default function ProfilePage() {
             {(user.students ?? []).map((s) => (
               <li key={s.id}>
                 <button onClick={() => setViewAs(s)} className={`flex w-full items-center gap-3 rounded-card border px-3 py-2.5 text-left ${viewAs?.id === s.id ? 'border-sky/50 bg-navy-700/50' : 'border-line/10 bg-white/[0.02]'}`}>
-                  <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-navy-700 text-sky">{(s.givenName || s.firstname)[0]}</span>
+                  <Avatar src={api.avatar(s.id)} name={s.fullName} size={36} />
                   <span className="flex-1">
                     <span className="block text-sm font-medium text-ink">{s.fullName}</span>
                     <span className="block text-xs text-ink-muted">{s.role.name}</span>
@@ -99,9 +98,15 @@ export default function ProfilePage() {
 
       {user.role.type === 'student' && user.guardians?.length ? (
         <Card title="Guardians">
-          <ul className="text-sm text-ink/90">
+          <ul className="grid grid-cols-1 gap-2 text-sm text-ink/90 sm:grid-cols-2">
             {user.guardians.map((g) => (
-              <li key={g.id}>{g.fullName}</li>
+              <li key={g.id} className="flex items-center gap-3 rounded-card border border-line/10 px-3 py-2">
+                <Avatar src={api.avatar(g.id)} name={g.fullName} size={36} />
+                <span>
+                  <span className="block">{g.fullName}</span>
+                  <span className="block text-xs text-ink-muted">{g.role.name}</span>
+                </span>
+              </li>
             ))}
           </ul>
         </Card>

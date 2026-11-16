@@ -1,6 +1,7 @@
 import { SchoolboxClient } from './client';
 import type {
   AssessmentList,
+  GroupData,
   CalendarAjaxEvent,
   EvidenceFeedResponse,
   NewsArticleResponse,
@@ -24,6 +25,10 @@ export interface PortalApi {
   absolute(path: string | null | undefined): string | undefined;
   /** URL for a Schoolbox asset (image, avatar) that still carries the session: same-origin via the proxy. */
   proxied(path: string | null | undefined): string | undefined;
+  /** Portrait URL for a user id (Schoolbox /portrait.php). */
+  avatar(userId: number | null | undefined, size?: 'square64' | 'square72' | 'maxsize'): string | undefined;
+  /** Members of a class or group page. */
+  getGroupMembers(folderId: number): Promise<GroupData>;
 
   login(username: string, password: string): Promise<SessionInfo>;
   loginWithJwt(jwt: string): Promise<SessionInfo>;
@@ -72,6 +77,14 @@ export class LiveApi implements PortalApi {
       return path;
     }
     return this.client.baseUrl + (path.startsWith('/') ? path : `/${path}`);
+  }
+
+  avatar(userId: number | null | undefined, size: 'square64' | 'square72' | 'maxsize' = 'square64') {
+    if (!userId) return undefined;
+    return this.proxied(`/portrait.php?id=${userId}&size=${size}`);
+  }
+  getGroupMembers(folderId: number) {
+    return this.client.get<GroupData>(`/group/getData/${folderId}`);
   }
 
   login(username: string, password: string) {

@@ -25,6 +25,10 @@ so errors arrive as RFC 7807 `application/problem+json`.
 | Search | `GET /api/search?keyword=&filter={"types":[...]}&limit=` | Result `type` drives icons; `news` results open in-app, others deep-link to classic iLINQ. |
 | Feedback / badges / learning moments | `GET /learning/evidenceFeed/user/{id}?cursor=` | Students see their own, parents their children's. Items discriminated by `discriminator`. |
 | Assessments (staff) | `GET /api/assessment?filter=&limit=` | Superuser/staff only; wired in the client but unused by the student UI. |
+| Class list | `GET /group/getData/{folderId}` | Members with role, house, year level and avatar link. Documented as superuser-only; the app tries it, then falls back to `GET /api/search/folder/{id}?keyword=` filtered to `user.*` results, then to the embedded classic page. |
+| Photos | `GET /portrait.php?id={userId}&size=square64` (also `square72`, `maxsize`) | Portrait for any user id. Loaded through the proxy so the session cookie applies. Teacher ids come from `meta.authorId` on class events. |
+| Class/group news | `GET /news/lists/folder/{id}` | Articles audienced to a page. |
+| Page content | `GET /api/search/folder/{id}?keyword=` | Files, units, links, forums and assessments inside a page. |
 | Token | `POST /user/token` | Creates a scoped JWT for the signed-in user. |
 
 ## Deep links into classic iLINQ

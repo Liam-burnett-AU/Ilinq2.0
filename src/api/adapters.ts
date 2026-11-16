@@ -18,6 +18,8 @@ export interface PortalEvent {
   typeLabel?: string;
   /** Author for events; the teacher for classes. */
   author?: string;
+  /** Schoolbox user id of the author/teacher (for portraits). */
+  authorId?: number;
   completed?: boolean;
   /** Schoolbox-relative link to the item (class page, assessment, event). */
   path?: string;
@@ -144,6 +146,7 @@ export function toPortalEvent(ev: CalendarAjaxEvent): PortalEvent {
     detail,
     typeLabel: meta.type || undefined,
     author,
+    authorId: typeof meta.authorId === 'number' && meta.authorId > 0 ? meta.authorId : undefined,
     completed: kind === 'dueWork' ? !!meta.completed : undefined,
     path,
     code,
@@ -207,6 +210,7 @@ export interface ClassSummary {
   code: string;
   subject: string;
   teacher?: string;
+  teacherId?: number;
   rooms: string[];
   folderId?: number;
   path?: string;
@@ -224,8 +228,9 @@ export function summariseClasses(events: PortalEvent[]): ClassSummary[] {
       cur.count++;
       if (e.location && !cur.rooms.includes(e.location)) cur.rooms.push(e.location);
       cur.teacher ||= e.author;
+      cur.teacherId ||= e.authorId;
     } else {
-      map.set(key, { code: e.code || '', subject: e.title, teacher: e.author, rooms: e.location ? [e.location] : [], folderId: e.folderId, path: e.path, colour: e.colour, count: 1 });
+      map.set(key, { code: e.code || '', subject: e.title, teacher: e.author, teacherId: e.authorId, rooms: e.location ? [e.location] : [], folderId: e.folderId, path: e.path, colour: e.colour, count: 1 });
     }
   }
   return [...map.values()].sort((a, b) => a.subject.localeCompare(b.subject));

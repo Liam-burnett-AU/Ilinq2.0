@@ -1,6 +1,6 @@
 import type { PortalApi } from '../schoolbox';
-import type { AssessmentList, EvidenceFeedResponse, NewsArticleResponse, NewsFeedItem, NewsTopic, SearchFilter, SearchResultList, SessionInfo, User, UserToken } from '../types';
-import { DEMO_ARTICLES, DEMO_EVIDENCE, DEMO_FOLDER_ITEMS, DEMO_NEWS, DEMO_PARENT, DEMO_SEARCH, DEMO_STUDENT, DEMO_TOPICS, buildCalendar } from './fixtures';
+import type { AssessmentList, EvidenceFeedResponse, GroupData, NewsArticleResponse, NewsFeedItem, NewsTopic, SearchFilter, SearchResultList, SessionInfo, User, UserToken } from '../types';
+import { DEMO_ARTICLES, DEMO_EVIDENCE, DEMO_FOLDER_ITEMS, DEMO_GROUP, demoPortrait, DEMO_NEWS, DEMO_PARENT, DEMO_SEARCH, DEMO_STUDENT, DEMO_TOPICS, buildCalendar } from './fixtures';
 import { ApiError } from '../client';
 
 const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -17,7 +17,17 @@ export class DemoApi implements PortalApi {
     return /^https?:/i.test(path) ? path : this.origin + path;
   }
   proxied(path: string | null | undefined) {
+    const m = path?.match(/portrait\.php\?id=(\d+)/);
+    if (m) return demoPortrait(Number(m[1]));
     return this.absolute(path);
+  }
+  avatar(userId: number | null | undefined) {
+    // Demo portraits: deterministic generated SVG so the UI shows photos without a server.
+    return userId ? demoPortrait(userId) : undefined;
+  }
+  async getGroupMembers(folderId: number): Promise<GroupData> {
+    await wait(this.latency);
+    return DEMO_GROUP(folderId);
   }
 
   async login(username: string, _password: string): Promise<SessionInfo> {
